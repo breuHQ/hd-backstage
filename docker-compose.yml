@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=${BACKSTAGE_DB_NAME}
+      - POSTGRES_USER=${BACKSTAGE_DB_USER}
+      - POSTGRES_PASSWORD=${BACKSTAGE_DB_PASS}
+    ports:
+      - 5432:5432
+    volumes:  # this is the default
+      - backstage-db-data:/var/lib/postgresql/data
+    networks:
+      - backstage-network
+    restart: always
+
+networks:
+  backstage-network: {}
+
+volumes:
+  backstage-db-data: {}
