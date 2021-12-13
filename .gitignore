@@ -351,6 +351,9 @@ ehthumbs_vista.db
 *.msm
 *.msp
 
+# Terraform
+.terraform
+
 # Windows shortcuts
 *.lnk
 
