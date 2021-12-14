@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   db:
-    image: postgres:13
+    image: postgres:14
     environment:
       - POSTGRES_DB=${BACKSTAGE_DB_NAME}
       - POSTGRES_USER=${BACKSTAGE_DB_USER}
