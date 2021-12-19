@@ -10,6 +10,10 @@ terraform {
       version = "~> 3.57.0"
     }
   }
+
+  backend "gcs" {
+    bucket = "hd-backstage-poc-terraform-state"
+  }
 }
 
 provider "google" {
