@@ -17,4 +17,10 @@ resource "google_artifact_registry_repository" "backstage_frontend" {
   location      = var.region
   repository_id = "backstage-frontend"
   format        = "DOCKER"
+
+  labels = {
+    application = "backstage"
+    environment = "poc"
+  }
+
 }
