@@ -2,7 +2,7 @@ resource "google_artifact_registry_repository" "backstage_backend" {
   provider      = google-beta
   project       = var.project
   location      = var.region
-  repository_id = "backstage-backend"
+  repository_id = "${local.computed_name}-backend"
   format        = "DOCKER"
 
   labels = {
@@ -15,7 +15,7 @@ resource "google_artifact_registry_repository" "backstage_frontend" {
   provider      = google-beta
   project       = var.project
   location      = var.region
-  repository_id = "backstage-frontend"
+  repository_id = "${local.computed_name}-frontend"
   format        = "DOCKER"
 
   labels = {
