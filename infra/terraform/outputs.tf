@@ -2,7 +2,7 @@ output "db_instance" {
   value = module.db.master_instance_name
 }
 
-output "db_instance_pvt_ip" {
+output "db_instance_private_ip" {
   value = module.db.master_private_ip_address
 }
 

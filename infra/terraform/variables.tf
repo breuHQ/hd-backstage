@@ -28,3 +28,16 @@ variable "db_machine_type" {
   type        = string
   default     = "db-f1-micro"
 }
+
+variable "service_account_roles" {
+  description = "The service account roles for workload identity"
+  type        = list(string)
+  default = [
+    "roles/artifactregistry.reader",
+    "roles/cloudsql.client",
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter",
+    "roles/stackdriver.resourceMetadata.writer",
+    "roles/storage.objectViewer",
+  ]
+}

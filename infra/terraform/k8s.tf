@@ -22,5 +22,12 @@ resource "google_artifact_registry_repository" "backstage_frontend" {
     application = "backstage"
     environment = "poc"
   }
-
 }
+
+# module "k8_backstage_cluster" {
+#   source = "../../../../breu/terraform/terraform-gcp-kubernetes"
+
+#   project   = var.project
+#   name      = local.computed_name
+#   namespace = "backstage"
+# }

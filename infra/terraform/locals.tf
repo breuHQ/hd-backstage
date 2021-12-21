@@ -3,7 +3,13 @@
 # ------------------------------------------------------------------------------
 
 resource "random_id" "name" {
-  byte_length = 2
+  byte_length = 4
+
+  keepers = {
+    project = var.project,
+    region  = var.region,
+    prefix  = var.name_prefix
+  }
 }
 
 resource "random_password" "db_password" {
