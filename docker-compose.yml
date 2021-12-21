@@ -2,8 +2,8 @@ version: '3.7'
 services:
   backend:
     build:
-      context: ./core/packages
-      dockerfile: backend/Dockerfile
+      context: ./core
+      dockerfile: packages/backend/Dockerfile
   db:
     image: postgres:14
     environment:
