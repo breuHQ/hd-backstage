@@ -4,6 +4,18 @@ services:
     build:
       context: ./core
       dockerfile: packages/backend/Dockerfile
+    image: backstage/backend
+    environment:
+      - BACKSTAGE_DB_HOST=db
+      - BACKSTAGE_DB_PORT=${BACKSTAGE_DB_PORT}
+      - BACKSTAGE_DB_USER=${BACKSTAGE_DB_USER}
+      - BACKSTAGE_DB_NAME=${BACKSTAGE_DB_NAME}
+      - BACKSTAGE_DB_PASS=${BACKSTAGE_DB_PASS}
+    networks:
+      - backstage-network
+    restart: always
+    ports:
+      - 7007:7007
   db:
     image: postgres:14
     environment:

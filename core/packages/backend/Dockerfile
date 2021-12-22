@@ -22,3 +22,4 @@ RUN yarn install --frozen-lockfile --production --network-timeout 300000 && rm -
 
 # Then copy the rest of the backend bundle, along with any other files we might want.
 ADD packages/backend/dist/bundle.tar.gz app-config.yaml ./
+CMD ["node", "packages/backend", "--config", "app-config.yaml"]
