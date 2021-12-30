@@ -20,7 +20,7 @@ provider "kubernetes" {
 }
 
 module "backstage_gke" {
-  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine?ref=v17.3.0"
+  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v17.3.0"
   project_id                = var.project
   name                      = local.computed_name
   region                    = var.region
@@ -31,10 +31,12 @@ module "backstage_gke" {
   create_service_account    = false
   service_account           = google_service_account.backstage.email
   default_max_pods_per_node = 32
+  enable_private_nodes      = true
+  master_ipv4_cidr_block    = "10.1.1.0/28"
 
   node_pools = [
     {
-      name               = "${local.computed_name}-gke-node-pool"
+      name               = "${local.computed_name}-node-pool"
       machine_type       = "e2-medium"
       min_count          = 1
       max_count          = 8
@@ -50,6 +52,11 @@ module "backstage_gke" {
       preemptible        = true
     },
   ]
+
+  cluster_resource_labels = {
+    application = "backstage"
+    environment = "poc"
+  }
 
   node_pools_labels = {
     all = {

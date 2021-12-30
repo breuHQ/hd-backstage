@@ -19,10 +19,6 @@ resource "google_compute_subnetwork" "backstage" {
 
   secondary_ip_range = [
     {
-      range_name    = "${local.computed_name}-gke-nodes"
-      ip_cidr_range = "10.1.1.0/24"
-    },
-    {
       range_name    = "${local.computed_name}-gke-pods"
       ip_cidr_range = "10.1.2.0/24"
     },
