@@ -30,9 +30,10 @@ module "backstage_gke" {
   ip_range_services         = "${local.computed_name}-gke-services"
   create_service_account    = false
   service_account           = google_service_account.backstage.email
-  default_max_pods_per_node = 32
+  default_max_pods_per_node = 64
   enable_private_nodes      = true
   master_ipv4_cidr_block    = "10.1.1.0/28"
+  remove_default_node_pool  = true
 
   node_pools = [
     {
@@ -66,3 +67,16 @@ module "backstage_gke" {
   }
 }
 
+resource "null_resource" "backstage_cluster_credentials" {
+  depends_on = [
+    module.backstage_gke.google_container_cluster,
+  ]
+
+  triggers = {
+    clusters = "${module.backstage_gke.name}-${module.backstage_gke.endpoint}",
+  }
+
+  provisioner "local-exec" {
+    command = "gcloud container clusters get-credentials ${module.backstage_gke.name} --region ${var.region}"
+  }
+}

@@ -13,20 +13,19 @@ resource "google_compute_subnetwork" "backstage" {
   provider                 = google-beta
   name                     = "${local.computed_name}-subnetwork"
   region                   = var.region
-  ip_cidr_range            = "10.0.0.0/16" # 2^16 possible ip address
+  ip_cidr_range            = "10.0.0.0/16" # 256 x 256 possible ip address
   network                  = google_compute_network.backstage.self_link
   private_ip_google_access = true
 
   secondary_ip_range = [
     {
       range_name    = "${local.computed_name}-gke-pods"
-      ip_cidr_range = "10.1.2.0/24"
+      ip_cidr_range = "10.2.0.0/16" # 256 x 256 possible ip address
     },
     {
       range_name    = "${local.computed_name}-gke-services"
-      ip_cidr_range = "10.1.3.0/24"
+      ip_cidr_range = "10.3.0.0/16" # 256 x 256 possible address
     }
-
   ]
 }
 
