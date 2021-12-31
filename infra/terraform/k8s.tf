@@ -70,6 +70,7 @@ module "backstage_gke" {
   node_pools_oauth_scopes = {
     all = [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.read_write",
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/sqlservice.admin",
@@ -144,4 +145,38 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
       }
     })
   }
+}
+
+# ------------------------------------------------------------------------------
+# WORKLOAD IDENTITY CONFIGURATION
+# ------------------------------------------------------------------------------
+
+resource "kubernetes_service_account" "backstage" {
+  depends_on = [
+    kubernetes_namespace.backstage,
+  ]
+
+  metadata {
+    name      = local.computed_name
+    namespace = local.backstage_cluster_namespace
+
+    annotations = {
+      "iam.gke.io/gcp-service-account" = google_service_account.backstage.email
+    }
+  }
+
+  image_pull_secret {
+    name = "docker"
+  }
+}
+
+resource "google_service_account_iam_member" "backstage_workload_identity" {
+  depends_on = [
+    kubernetes_namespace.backstage,
+    kubernetes_service_account.backstage,
+  ]
+
+  service_account_id = google_service_account.backstage.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project}.svc.id.goog[${local.backstage_cluster_namespace}/${local.computed_name}]"
 }
