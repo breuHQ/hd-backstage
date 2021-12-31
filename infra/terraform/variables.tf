@@ -18,6 +18,11 @@ variable "db_name" {
   default     = "backstage"
 }
 
+variable "db_user" {
+  description = "The database user"
+  default     = "backstage"
+}
+
 variable "db_engine" {
   description = "The version of the database to use."
   default     = "POSTGRES_14"

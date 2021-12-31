@@ -1,3 +1,7 @@
+# ------------------------------------------------------------------------------
+# CREATE DOCKER REGISTRY
+# ------------------------------------------------------------------------------
+
 resource "google_artifact_registry_repository" "backstage" {
   provider      = google-beta
   project       = var.project
@@ -10,6 +14,10 @@ resource "google_artifact_registry_repository" "backstage" {
     environment = "poc"
   }
 }
+
+# ------------------------------------------------------------------------------
+# CREATE KUBERNETES CLUSTER AND PROVISION THE TERRAFORM PROVIDER
+# ------------------------------------------------------------------------------
 
 data "google_client_config" "default" {}
 
@@ -26,14 +34,19 @@ module "backstage_gke" {
   region                    = var.region
   network                   = google_compute_network.backstage.name
   subnetwork                = google_compute_subnetwork.backstage.name
-  ip_range_pods             = "${local.computed_name}-gke-pods"
-  ip_range_services         = "${local.computed_name}-gke-services"
+  ip_range_pods             = local.backstage_cluster_pods_ip_range_name
+  ip_range_services         = local.backstage_cluster_services_ip_range_name
   create_service_account    = false
   service_account           = google_service_account.backstage.email
   default_max_pods_per_node = 64
   enable_private_nodes      = true
   master_ipv4_cidr_block    = "10.1.1.0/28"
   remove_default_node_pool  = true
+
+  cluster_resource_labels = {
+    application = "backstage"
+    environment = "poc"
+  }
 
   node_pools = [
     {
@@ -54,11 +67,14 @@ module "backstage_gke" {
     },
   ]
 
-  cluster_resource_labels = {
-    application = "backstage"
-    environment = "poc"
+  node_pools_oauth_scopes = {
+    all = [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/sqlservice.admin",
+    ]
   }
-
   node_pools_labels = {
     all = {
       application = "backstage"
@@ -67,6 +83,9 @@ module "backstage_gke" {
   }
 }
 
+# ------------------------------------------------------------------------------
+# ADD CONFIGURATION TO KUBERNETES CONFIG TO RUN `kubectl` COMMAND
+# ------------------------------------------------------------------------------
 resource "null_resource" "backstage_cluster_credentials" {
   depends_on = [
     module.backstage_gke.google_container_cluster,
@@ -78,5 +97,51 @@ resource "null_resource" "backstage_cluster_credentials" {
 
   provisioner "local-exec" {
     command = "gcloud container clusters get-credentials ${module.backstage_gke.name} --region ${var.region}"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# PREPARE KUBERNETES CLUSTER TO RUN BACKSTAGE
+# ------------------------------------------------------------------------------
+
+resource "kubernetes_namespace" "backstage" {
+  depends_on = [
+    module.backstage_gke,
+    null_resource.backstage_cluster_credentials,
+  ]
+
+  metadata {
+    name = local.backstage_cluster_namespace
+  }
+}
+
+# ------------------------------------------------------------------------------
+# ENABLE KUBERNETES TO PULL FROM ARTIFACT REGISTRY 
+# ------------------------------------------------------------------------------
+
+resource "kubernetes_secret" "artifact_registry_credentials" {
+  depends_on = [
+    module.backstage_gke,
+    kubernetes_namespace.backstage
+  ]
+
+  metadata {
+    name      = "docker"
+    namespace = local.backstage_cluster_namespace
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      "auths" : {
+        "https://europe-west3-docker.pkg.dev" : {
+          email    = google_service_account.backstage.email
+          username = "_json_key"
+          password = trimspace(local.service_account_key_as_json)
+          auth     = base64encode(join(":", ["_json_key", local.service_account_key_as_json]))
+        }
+      }
+    })
   }
 }

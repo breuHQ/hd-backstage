@@ -8,6 +8,10 @@ resource "google_service_account" "backstage" {
   project      = var.project
 }
 
+resource "google_service_account_key" "backstage" {
+  service_account_id = local.computed_name
+}
+
 resource "google_project_iam_member" "service_account_roles" {
   for_each = toset(var.service_account_roles)
 

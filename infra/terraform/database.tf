@@ -9,12 +9,12 @@ module "db" {
   region               = var.region
   name                 = local.computed_name
   db_name              = var.db_name
+  master_user_name     = var.db_user
+  master_user_password = local.db_password
   engine               = var.db_engine
   machine_type         = var.db_machine_type
   disk_autoresize      = true
   deletion_protection  = false
-  master_user_password = local.master_user_password
-  master_user_name     = "backstage"
   private_network      = google_compute_network.backstage.self_link
   dependencies         = [google_service_networking_connection.backstage_vpc_connection.network]
   custom_labels = {

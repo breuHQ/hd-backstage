@@ -19,17 +19,19 @@ resource "google_compute_subnetwork" "backstage" {
 
   secondary_ip_range = [
     {
-      range_name    = "${local.computed_name}-gke-pods"
+      range_name    = local.backstage_cluster_pods_ip_range_name
       ip_cidr_range = "10.2.0.0/16" # 256 x 256 possible ip address
     },
     {
-      range_name    = "${local.computed_name}-gke-services"
-      ip_cidr_range = "10.3.0.0/16" # 256 x 256 possible address
+      range_name    = local.backstage_cluster_services_ip_range_name
+      ip_cidr_range = "10.3.0.0/16" # 256 x 256 possible ip address
     }
   ]
 }
 
-# Reserve global internal address range for the peering
+# ------------------------------------------------------------------------------
+# CREATE IP FOR VPC PEERING
+# ------------------------------------------------------------------------------
 resource "google_compute_global_address" "peering_ip_address" {
   provider      = google-beta
   name          = "${local.computed_name}-peering-ip"
@@ -44,7 +46,9 @@ resource "google_compute_global_address" "peering_ip_address" {
   }
 }
 
-# Establish VPC network peering connection using the reserved address range
+# ------------------------------------------------------------------------------
+# BIND PEERING IP TO NETWORK
+# ------------------------------------------------------------------------------
 resource "google_service_networking_connection" "backstage_vpc_connection" {
   provider                = google-beta
   network                 = google_compute_network.backstage.self_link
