@@ -10,6 +10,10 @@ resource "google_service_account" "backstage" {
 
 resource "google_service_account_key" "backstage" {
   service_account_id = local.computed_name
+
+  depends_on = [
+    google_service_account.backstage
+  ]
 }
 
 resource "google_project_iam_member" "service_account_roles" {

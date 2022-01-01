@@ -2,7 +2,7 @@
 # CREATE A RANDOM SUFFIX AND PREPARE RESOURCE NAMES
 # ------------------------------------------------------------------------------
 
-resource "random_id" "name" {
+resource "random_id" "suffix" {
   byte_length = 4
 
   keepers = {
@@ -18,7 +18,7 @@ resource "random_password" "db_password" {
 
 locals {
   # If name_override is specified, use that - otherwise use the name_prefix with a random string
-  computed_name                            = "${var.name_prefix}-${random_id.name.hex}"
+  computed_name                            = "${var.name_prefix}-${random_id.suffix.hex}"
   service_account_key_as_json              = base64decode(google_service_account_key.backstage.private_key)
   db_password                              = random_password.db_password.result
   backstage_cluster_pods_ip_range_name     = "${local.computed_name}-backstage-gke-pods"

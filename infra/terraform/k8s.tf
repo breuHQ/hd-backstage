@@ -40,7 +40,7 @@ module "backstage_gke" {
   service_account           = google_service_account.backstage.email
   default_max_pods_per_node = 64
   enable_private_nodes      = true
-  master_ipv4_cidr_block    = "10.1.1.0/28"
+  master_ipv4_cidr_block    = "10.1.1.0/28" # 2 ^ 4 ip address
   remove_default_node_pool  = true
 
   cluster_resource_labels = {
@@ -82,6 +82,10 @@ module "backstage_gke" {
       environment = "poc"
     }
   }
+
+  depends_on = [
+    google_compute_subnetwork.backstage
+  ]
 }
 
 # ------------------------------------------------------------------------------
@@ -113,6 +117,10 @@ resource "kubernetes_namespace" "backstage" {
 
   metadata {
     name = local.backstage_cluster_namespace
+    labels = {
+      application = "backstage"
+      environment = "poc"
+    }
   }
 }
 
@@ -129,6 +137,10 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
   metadata {
     name      = "docker"
     namespace = local.backstage_cluster_namespace
+    labels = {
+      application = "backstage"
+      environment = "poc"
+    }
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -162,6 +174,11 @@ resource "kubernetes_service_account" "backstage" {
 
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.backstage.email
+    }
+
+    labels = {
+      application = "backstage"
+      environment = "poc"
     }
   }
 

@@ -1,3 +1,7 @@
+output "artifiact_repository_link" {
+  value = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.backstage.name}"
+}
+
 output "db_instance" {
   value = module.db.master_instance_name
 }
@@ -12,4 +16,12 @@ output "db_instance_link" {
 
 output "db_instance_proxy_connection" {
   value = module.db.master_proxy_connection
+}
+
+output "dns_managed_zone_name_servers" {
+  value = google_dns_managed_zone.backstage.name_servers
+}
+
+output "suffix" {
+  value = random_id.suffix.hex
 }
