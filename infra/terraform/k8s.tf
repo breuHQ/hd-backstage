@@ -197,3 +197,32 @@ resource "google_service_account_iam_member" "backstage_workload_identity" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:${var.project}.svc.id.goog[${local.backstage_cluster_namespace}/${local.computed_name}]"
 }
+
+# ------------------------------------------------------------------------------
+# DATABASE SECRETS TO BE USED ACCROSS APPLICATIONS
+# ------------------------------------------------------------------------------
+
+resource "kubernetes_secret" "backstage_db_credentials" {
+  depends_on = [
+    module.db,
+    kubernetes_namespace.backstage,
+  ]
+
+  metadata {
+    name      = "backstage-db-credentials"
+    namespace = local.backstage_cluster_namespace
+
+    labels = {
+      application = "backstage"
+      environment = "poc"
+    }
+  }
+
+  data = {
+    BACKSTAGE_BD_HOST = module.db.master_private_ip_address
+    BACKSTAGE_DB_PORT = 5432
+    BACKSTAGE_DB_NAME = var.db_name
+    BACKSTAGE_DB_USER = var.db_user
+    BACKSTAGE_DB_PASS = local.db_password
+  }
+}
