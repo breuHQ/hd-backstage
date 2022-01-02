@@ -17,6 +17,13 @@ module "db" {
   deletion_protection  = false
   private_network      = google_compute_network.backstage.self_link
   dependencies         = [google_service_networking_connection.backstage_vpc_connection.network]
+
+  database_flags = [
+    {
+      name  = "max_connections"
+      value = "100"
+    }
+  ]
   custom_labels = {
     "application" = "backstage"
     "environment" = "poc"

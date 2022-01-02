@@ -169,7 +169,7 @@ resource "kubernetes_service_account" "backstage" {
   ]
 
   metadata {
-    name      = local.computed_name
+    name      = "backstage"
     namespace = local.backstage_cluster_namespace
 
     annotations = {
@@ -219,10 +219,9 @@ resource "kubernetes_secret" "backstage_db_credentials" {
   }
 
   data = {
-    BACKSTAGE_BD_HOST = module.db.master_private_ip_address
-    BACKSTAGE_DB_PORT = 5432
-    BACKSTAGE_DB_NAME = var.db_name
-    BACKSTAGE_DB_USER = var.db_user
-    BACKSTAGE_DB_PASS = local.db_password
+    db_host = module.db.master_private_ip_address
+    db_port = 5432
+    db_user = var.db_user
+    db_pass = local.db_password
   }
 }
