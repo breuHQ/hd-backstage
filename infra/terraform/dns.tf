@@ -4,6 +4,6 @@
 
 resource "google_dns_managed_zone" "backstage" {
   name        = "hd-dev"
-  dns_name    = "hd.dev.breu.io."
+  dns_name    = local.dns_name
   description = "HD digital POC domain"
 }

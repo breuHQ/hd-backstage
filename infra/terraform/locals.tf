@@ -24,4 +24,5 @@ locals {
   backstage_cluster_pods_ip_range_name     = "${local.computed_name}-backstage-gke-pods"
   backstage_cluster_services_ip_range_name = "${local.computed_name}-backstage-gke-services"
   backstage_cluster_namespace              = var.name_prefix
+  dns_name                                 = "hd.dev.breu.io."
 }
