@@ -1,6 +1,6 @@
 app:
   title: HD Digital Landscape
-  baseUrl: http://localhost:3000
+  baseUrl: https://hd-backstage-poc-28107.web.app
 
 organization:
   name: HD Digital
@@ -11,7 +11,7 @@ backend:
   # auth:
   #   keys:
   #     - secret: ${BACKEND_SECRET}
-  baseUrl: http://localhost:7007
+  baseUrl: https://backend.hd.dev.breu.io
   listen:
     port: 7007
   csp:
@@ -19,7 +19,7 @@ backend:
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: http://localhost:3000
+    origin: https://hd-backstage-poc-28107.web.app
     methods: [GET, POST, PUT, DELETE]
     credentials: true
   # config options: https://node-postgres.com/api/client
