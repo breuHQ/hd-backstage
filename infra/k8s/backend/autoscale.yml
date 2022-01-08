@@ -1,0 +1,23 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backstage-backend
+  namespace: backstage
+  labels:
+    app: backstage-backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backstage-backend
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 75
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 75

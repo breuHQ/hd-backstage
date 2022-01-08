@@ -97,3 +97,12 @@ resource "google_compute_router_nat" "backstage_router_nat" {
     filter = "ALL"
   }
 }
+
+# ------------------------------------------------------------------------------
+# BACKSTAGE IP FOR BACKEND TO BE ASSIGNED TO LOAD BALANCER
+# ------------------------------------------------------------------------------
+
+resource "google_compute_global_address" "backstage_backend" {
+  project = var.project
+  name    = "backstage-backend"
+}

@@ -43,6 +43,16 @@ module "backstage_gke" {
   master_ipv4_cidr_block    = "10.1.1.0/28" # 2 ^ 4 ip address
   remove_default_node_pool  = true
 
+  # cluster_autoscaling = {
+  #     enabled             = true
+  #     autoscaling_profile = "BALANCED"
+  #     min_cpu_cores       = 1
+  #     max_cpu_cores       = 8
+  #     min_memory_gb       = 1
+  #     max_memory_gb       = 32
+  #     gpu_resources = []
+  # }
+  
   cluster_resource_labels = {
     application = "backstage"
     environment = "poc"

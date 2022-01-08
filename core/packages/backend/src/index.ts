@@ -22,6 +22,7 @@ import {
 import { Config } from '@backstage/config';
 // import app from './plugins/app';
 import auth from './plugins/auth';
+import healthcheck from './plugins/healthcheck';
 import catalog from './plugins/catalog';
 import scaffolder from './plugins/scaffolder';
 import proxy from './plugins/proxy';
@@ -55,25 +56,26 @@ async function main() {
   });
   const createEnv = makeCreateEnv(config);
 
-  const catalogEnv = useHotMemoize(module, () => createEnv('catalog'));
-  const scaffolderEnv = useHotMemoize(module, () => createEnv('scaffolder'));
   const authEnv = useHotMemoize(module, () => createEnv('auth'));
+  const catalogEnv = useHotMemoize(module, () => createEnv('catalog'));
+  const healthcheckEnv = useHotMemoize(module, () => createEnv('healthcheck'));
   const proxyEnv = useHotMemoize(module, () => createEnv('proxy'));
-  const techdocsEnv = useHotMemoize(module, () => createEnv('techdocs'));
+  const scaffolderEnv = useHotMemoize(module, () => createEnv('scaffolder'));
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
-  // const appEnv = useHotMemoize(module, () => createEnv('app'));
+  const techdocsEnv = useHotMemoize(module, () => createEnv('techdocs'));
 
   const apiRouter = Router();
-  apiRouter.use('/catalog', await catalog(catalogEnv));
-  apiRouter.use('/scaffolder', await scaffolder(scaffolderEnv));
   apiRouter.use('/auth', await auth(authEnv));
-  apiRouter.use('/techdocs', await techdocs(techdocsEnv));
+  apiRouter.use('/catalog', await catalog(catalogEnv));
   apiRouter.use('/proxy', await proxy(proxyEnv));
+  apiRouter.use('/scaffolder', await scaffolder(scaffolderEnv));
   apiRouter.use('/search', await search(searchEnv));
+  apiRouter.use('/techdocs', await techdocs(techdocsEnv));
   apiRouter.use(notFoundHandler());
 
   const service = createServiceBuilder(module)
     .loadConfig(config)
+    .addRouter('', await healthcheck(healthcheckEnv))
     .addRouter('/api', apiRouter);
   // .addRouter('', await app(appEnv));
 

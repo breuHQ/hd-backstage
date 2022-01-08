@@ -1,0 +1,11 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: backstage-backend-redirect
+  namespace: backstage
+  labels:
+    app: backstage-backend
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: PERMANENT_REDIRECT
