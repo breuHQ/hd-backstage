@@ -6,7 +6,7 @@ metadata:
   labels:
     app: backstage-backend
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: backstage-backend
@@ -27,17 +27,24 @@ spec:
               path: /healthcheck
               port: 7007
             initialDelaySeconds: 60
-            periodSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 5
+            timeoutSeconds: 15
           readinessProbe:
             httpGet:
               path: /healthcheck
               port: 7007
             initialDelaySeconds: 60
-            periodSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 5
+            timeoutSeconds: 15
           resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              cpu: "250m"
+              memory: "256Mi"
           ports:
             - name: http
               containerPort: 7007

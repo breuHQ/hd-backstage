@@ -52,7 +52,7 @@ module "backstage_gke" {
   #     max_memory_gb       = 32
   #     gpu_resources = []
   # }
-  
+
   cluster_resource_labels = {
     application = "backstage"
     environment = "poc"
@@ -63,7 +63,7 @@ module "backstage_gke" {
       name               = "${local.computed_name}-node-pool"
       machine_type       = "e2-medium"
       min_count          = 1
-      max_count          = 8
+      max_count          = 32
       local_ssd_count    = 0
       disk_size_gb       = 10
       disk_type          = "pd-ssd"
@@ -71,7 +71,6 @@ module "backstage_gke" {
       auto_repair        = true
       auto_upgrade       = true
       service_account    = google_service_account.backstage.email
-      preemptible        = false
       initial_node_count = 1
       preemptible        = true
     },
