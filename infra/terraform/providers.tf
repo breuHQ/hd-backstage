@@ -20,6 +20,7 @@ provider "random" {}
 provider "null" {}
 provider "external" {}
 provider "template" {}
+provider "local" {}
 
 provider "google" {
   project = "hd-backstage-poc-28107"

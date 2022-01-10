@@ -221,17 +221,40 @@ resource "kubernetes_secret" "backstage_db_credentials" {
 # RENDERING K8S RESOURCE TEMPLATES
 # ------------------------------------------------------------------------------
 
-resource "template_dir" "k8s_backend_templates" {
-  source_dir      = "${path.module}/templates/k8s/backend"
-  destination_dir = "rendered/templates"
+# resource "template_dir" "k8s_backend_templates" {
+#   source_dir      = "${path.module}/templates/k8s/backend"
+#   destination_dir = "rendered/templates"
 
-  vars = {
-    metadata_name      = "backend"
-    metadata_namespace = local.backstage_cluster_namespace
-    resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
-    repository_link    = local.respository_link
+#   vars = {
+#     metadata_name      = "backend"
+#     metadata_namespace = local.backstage_cluster_namespace
+#     # resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
+#     resource_labels    = ["a", "b", "c"]
+#     repository_link    = local.respository_link
+#     image_name         = "backstage/backend"
+#     image_tag          = "latest"
+#     certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
+#   }
+# }
+
+resource "local_file" "k8s_backend_templates" {
+  for_each = fileset(
+    "${path.module}/templates/k8s/backend",
+    "*.yaml"
+  )
+
+  content = templatefile("${path.module}/templates/k8s/backend/${each.key}", {
+    # resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
+    certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
     image_name         = "backstage/backend"
     image_tag          = "latest"
-    certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
-  }
+    metadata_name      = "backend"
+    metadata_namespace = local.backstage_cluster_namespace
+    repository_link    = local.respository_link
+    resource_labels = merge(var.resource_labels, {
+      component = "backend"
+    })
+  })
+
+  filename = "./rendered/${each.key}"
 }

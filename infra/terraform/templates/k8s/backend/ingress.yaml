@@ -4,7 +4,9 @@ metadata:
   name: ${metadata_name}
   namespace: ${metadata_namespace}
   labels:
-    ${resource_labels}
+%{ for key, value in resource_labels ~}
+    ${key}: ${value}
+%{ endfor ~}
   annotations:
     kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.global-static-ip-name: ${metadata_name}

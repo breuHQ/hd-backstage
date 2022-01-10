@@ -3,8 +3,10 @@ kind: ManagedCertificate
 metadata:
   name: ${metadata_name}
   namespace: ${metadata_namespace}
-  labels: 
-    ${resource_labels}
+  labels:
+%{ for key, value in resource_labels ~}
+    ${key}: ${value}
+%{ endfor ~}
 spec:
   domains:
     - ${certificate_domain}

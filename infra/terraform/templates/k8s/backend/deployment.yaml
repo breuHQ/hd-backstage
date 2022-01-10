@@ -4,16 +4,22 @@ metadata:
   name: ${metadata_name}
   namespace: ${metadata_namespace}
   labels:
-    ${resource_labels}
+%{ for key, value in resource_labels ~}
+    ${key}: ${value}
+%{ endfor ~}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      application: ${metadata_name}
+%{ for key, value in resource_labels ~}
+      ${key}: ${value}
+%{ endfor ~}
   template:
     metadata:
       labels:
-        application: ${metadata_name}
+%{ for key, value in resource_labels ~}
+        ${key}: ${value}
+%{ endfor ~}
     spec:
       serviceAccountName: backstage
       imagePullSecrets:

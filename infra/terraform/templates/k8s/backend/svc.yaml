@@ -4,13 +4,17 @@ metadata:
   name: ${metadata_name}
   namespace: ${metadata_namespace}
   labels:
-    ${resource_labels}
+%{ for key, value in resource_labels ~}
+    ${key}: ${value}
+%{ endfor ~}
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 spec:
   type: NodePort
   selector:
-    application: ${metadata_name}
+%{ for key, value in resource_labels ~}
+    ${key}: ${value}
+%{ endfor ~}
   ports:
     - protocol: TCP
       port: 7007
