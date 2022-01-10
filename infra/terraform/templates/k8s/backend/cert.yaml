@@ -1,0 +1,10 @@
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: ${metadata_name}
+  namespace: ${metadata_namespace}
+  labels: 
+    ${resource_labels}
+spec:
+  domains:
+    - ${certificate_domain}

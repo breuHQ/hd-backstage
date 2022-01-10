@@ -1,5 +1,5 @@
 output "artifiact_repository_link" {
-  value = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.backstage.name}"
+  value = local.respository_link
 }
 
 output "db_instance" {

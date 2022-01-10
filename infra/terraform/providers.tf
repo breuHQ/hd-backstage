@@ -16,6 +16,11 @@ terraform {
   }
 }
 
+provider "random" {}
+provider "null" {}
+provider "external" {}
+provider "template" {}
+
 provider "google" {
   project = "hd-backstage-poc-28107"
   region  = "europe-west3"

@@ -28,7 +28,7 @@ provider "kubernetes" {
 }
 
 module "backstage_gke" {
-  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v17.3.0"
+  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v18.0.0"
   project_id                = var.project
   name                      = local.computed_name
   region                    = var.region
@@ -43,25 +43,22 @@ module "backstage_gke" {
   master_ipv4_cidr_block    = "10.1.1.0/28" # 2 ^ 4 ip address
   remove_default_node_pool  = true
 
-  # cluster_autoscaling = {
-  #     enabled             = true
-  #     autoscaling_profile = "BALANCED"
-  #     min_cpu_cores       = 1
-  #     max_cpu_cores       = 8
-  #     min_memory_gb       = 1
-  #     max_memory_gb       = 32
-  #     gpu_resources = []
-  # }
-
-  cluster_resource_labels = {
-    application = "backstage"
-    environment = "poc"
+  cluster_autoscaling = {
+    enabled             = true
+    autoscaling_profile = "OPTIMIZE_UTILIZATION"
+    min_cpu_cores       = 1
+    max_cpu_cores       = 8
+    min_memory_gb       = 1
+    max_memory_gb       = 32
+    gpu_resources       = []
   }
+
+  cluster_resource_labels = var.resource_labels
 
   node_pools = [
     {
       name               = "${local.computed_name}-node-pool"
-      machine_type       = "e2-medium"
+      machine_type       = "n2-standard-2"
       min_count          = 1
       max_count          = 32
       local_ssd_count    = 0
@@ -86,10 +83,7 @@ module "backstage_gke" {
     ]
   }
   node_pools_labels = {
-    all = {
-      application = "backstage"
-      environment = "poc"
-    }
+    all = var.resource_labels
   }
 
   depends_on = [
@@ -125,11 +119,8 @@ resource "kubernetes_namespace" "backstage" {
   ]
 
   metadata {
-    name = local.backstage_cluster_namespace
-    labels = {
-      application = "backstage"
-      environment = "poc"
-    }
+    name   = local.backstage_cluster_namespace
+    labels = var.resource_labels
   }
 }
 
@@ -146,10 +137,7 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
   metadata {
     name      = "docker"
     namespace = local.backstage_cluster_namespace
-    labels = {
-      application = "backstage"
-      environment = "poc"
-    }
+    labels    = var.resource_labels
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -185,10 +173,7 @@ resource "kubernetes_service_account" "backstage" {
       "iam.gke.io/gcp-service-account" = google_service_account.backstage.email
     }
 
-    labels = {
-      application = "backstage"
-      environment = "poc"
-    }
+    labels = var.resource_labels
   }
 
   image_pull_secret {
@@ -221,10 +206,7 @@ resource "kubernetes_secret" "backstage_db_credentials" {
     name      = "backstage-db-credentials"
     namespace = local.backstage_cluster_namespace
 
-    labels = {
-      application = "backstage"
-      environment = "poc"
-    }
+    labels = var.resource_labels
   }
 
   data = {
@@ -232,5 +214,24 @@ resource "kubernetes_secret" "backstage_db_credentials" {
     db_port = 5432
     db_user = var.db_user
     db_pass = local.db_password
+  }
+}
+
+# ------------------------------------------------------------------------------
+# RENDERING K8S RESOURCE TEMPLATES
+# ------------------------------------------------------------------------------
+
+resource "template_dir" "k8s_backend_templates" {
+  source_dir      = "${path.module}/templates/k8s/backend"
+  destination_dir = "rendered/templates"
+
+  vars = {
+    metadata_name      = "backend"
+    metadata_namespace = local.backstage_cluster_namespace
+    resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
+    repository_link    = local.respository_link
+    image_name         = "backstage/backend"
+    image_tag          = "latest"
+    certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
   }
 }

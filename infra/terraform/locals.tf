@@ -25,4 +25,5 @@ locals {
   backstage_cluster_services_ip_range_name = "${local.computed_name}-backstage-gke-services"
   backstage_cluster_namespace              = var.name_prefix
   dns_name                                 = "hd.dev.breu.io."
+  respository_link                         = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.backstage.name}"
 }

@@ -46,3 +46,12 @@ variable "service_account_roles" {
     "roles/storage.objectViewer",
   ]
 }
+
+variable "resource_labels" {
+  # type = map(any)
+  default = {
+    application = "backstage"
+    environment = "poc"
+    team        = "breu"
+  }
+}

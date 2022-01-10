@@ -39,11 +39,7 @@ resource "google_compute_global_address" "peering_ip_address" {
   address_type  = "INTERNAL"
   prefix_length = 16
   network       = google_compute_network.backstage.self_link
-
-  labels = {
-    application = "backstage"
-    environment = "poc"
-  }
+  labels        = var.resource_labels
 }
 
 # ------------------------------------------------------------------------------

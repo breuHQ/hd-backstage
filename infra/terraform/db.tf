@@ -24,8 +24,6 @@ module "db" {
       value = "100"
     }
   ]
-  custom_labels = {
-    "application" = "backstage"
-    "environment" = "poc"
-  }
+
+  custom_labels = var.resource_labels
 }
