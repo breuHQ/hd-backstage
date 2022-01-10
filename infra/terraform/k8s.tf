@@ -223,11 +223,11 @@ resource "kubernetes_secret" "backstage_db_credentials" {
 
 resource "local_file" "k8s_backend_templates" {
   for_each = fileset(
-    "${path.module}/templates/k8s/backend",
-    "*.yaml"
+    "${path.module}",
+    "templates/k8s/backend/*.yaml"
   )
 
-  content = templatefile("${path.module}/templates/k8s/backend/${each.key}", {
+  content = templatefile("${path.module}/${each.key}", {
     # resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
     certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
     image_name         = "backstage/backend"
