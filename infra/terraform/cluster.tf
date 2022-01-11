@@ -6,13 +6,9 @@ resource "google_artifact_registry_repository" "backstage" {
   provider      = google-beta
   project       = var.project
   location      = var.region
-  repository_id = local.computed_name
+  repository_id = local.cluster__artificat_registry__name
   format        = "DOCKER"
-
-  labels = {
-    application = "backstage"
-    environment = "poc"
-  }
+  labels        = var.resource_labels
 }
 
 # ------------------------------------------------------------------------------
@@ -30,17 +26,17 @@ provider "kubernetes" {
 module "backstage_gke" {
   source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v18.0.0"
   project_id                = var.project
-  name                      = local.computed_name
+  name                      = local.cluster__name
   region                    = var.region
   network                   = google_compute_network.backstage.name
-  subnetwork                = google_compute_subnetwork.backstage.name
-  ip_range_pods             = local.backstage_cluster_pods_ip_range_name
-  ip_range_services         = local.backstage_cluster_services_ip_range_name
+  subnetwork                = google_compute_subnetwork.backstage_cluster_subnetwork.name
+  ip_range_pods             = local.network__cluster_subnetwork__secondary_ip_ranges.pods.range_name
+  ip_range_services         = local.network__cluster_subnetwork__secondary_ip_ranges.services.range_name
   create_service_account    = false
-  service_account           = google_service_account.backstage.email
+  service_account           = local.cluster__workload_identity__google_service_account__email
   default_max_pods_per_node = 64
   enable_private_nodes      = true
-  master_ipv4_cidr_block    = "10.1.1.0/28" # 2 ^ 4 ip address
+  master_ipv4_cidr_block    = "10.100.0.0/28" # 2 ^ 4 ip address
   remove_default_node_pool  = true
 
   cluster_autoscaling = {
@@ -57,7 +53,7 @@ module "backstage_gke" {
 
   node_pools = [
     {
-      name               = "${local.computed_name}-node-pool"
+      name               = local.cluster__node_pool__backstage__name
       machine_type       = "n2-standard-2"
       min_count          = 1
       max_count          = 32
@@ -67,7 +63,7 @@ module "backstage_gke" {
       image_type         = "COS"
       auto_repair        = true
       auto_upgrade       = true
-      service_account    = google_service_account.backstage.email
+      service_account    = local.cluster__workload_identity__google_service_account__email
       initial_node_count = 1
       preemptible        = true
     },
@@ -87,7 +83,7 @@ module "backstage_gke" {
   }
 
   depends_on = [
-    google_compute_subnetwork.backstage
+    google_compute_subnetwork.backstage_cluster_subnetwork
   ]
 }
 
@@ -119,7 +115,7 @@ resource "kubernetes_namespace" "backstage" {
   ]
 
   metadata {
-    name   = local.backstage_cluster_namespace
+    name   = local.cluster__namespace__backstage__name
     labels = var.resource_labels
   }
 }
@@ -136,7 +132,7 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
 
   metadata {
     name      = "docker"
-    namespace = local.backstage_cluster_namespace
+    namespace = local.cluster__namespace__backstage__name
     labels    = var.resource_labels
   }
 
@@ -146,10 +142,10 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
     ".dockerconfigjson" = jsonencode({
       "auths" : {
         "https://europe-west3-docker.pkg.dev" : {
-          email    = google_service_account.backstage.email
+          email    = local.cluster__workload_identity__google_service_account__email
           username = "_json_key"
-          password = trimspace(local.service_account_key_as_json)
-          auth     = base64encode(join(":", ["_json_key", local.service_account_key_as_json]))
+          password = trimspace(local.cluster__workload_identity__google_service_account__key)
+          auth     = base64encode(join(":", ["_json_key", local.cluster__workload_identity__google_service_account__key]))
         }
       }
     })
@@ -166,11 +162,11 @@ resource "kubernetes_service_account" "backstage" {
   ]
 
   metadata {
-    name      = "backstage"
-    namespace = local.backstage_cluster_namespace
+    name      = local.cluster__workload_identity__kubernetes_service_account__name
+    namespace = local.cluster__namespace__backstage__name
 
     annotations = {
-      "iam.gke.io/gcp-service-account" = google_service_account.backstage.email
+      "iam.gke.io/gcp-service-account" = local.cluster__workload_identity__google_service_account__email
     }
 
     labels = var.resource_labels
@@ -187,24 +183,24 @@ resource "google_service_account_iam_member" "backstage_workload_identity" {
     kubernetes_service_account.backstage,
   ]
 
-  service_account_id = google_service_account.backstage.id
+  service_account_id = google_service_account.backstage_cluster_workload_identity.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project}.svc.id.goog[${local.backstage_cluster_namespace}/${local.computed_name}]"
+  member             = "serviceAccount:${var.project}.svc.id.goog[${local.cluster__namespace__backstage__name}/${local.cluster__workload_identity__kubernetes_service_account__name}]"
 }
 
 # ------------------------------------------------------------------------------
 # DATABASE SECRETS TO BE USED ACCROSS APPLICATIONS
 # ------------------------------------------------------------------------------
 
-resource "kubernetes_secret" "backstage_db_credentials" {
+resource "kubernetes_secret" "backstage_database_credentials" {
   depends_on = [
     module.db,
     kubernetes_namespace.backstage,
   ]
 
   metadata {
-    name      = "backstage-db-credentials"
-    namespace = local.backstage_cluster_namespace
+    name      = local.cluster__namespace__backstage__secret__database_credentials__name
+    namespace = local.cluster__namespace__backstage__name
 
     labels = var.resource_labels
   }
@@ -212,33 +208,40 @@ resource "kubernetes_secret" "backstage_db_credentials" {
   data = {
     db_host = module.db.master_private_ip_address
     db_port = 5432
-    db_user = var.db_user
-    db_pass = local.db_password
+    db_user = local.database__user
+    db_pass = local.database__password
   }
 }
 
-# ------------------------------------------------------------------------------
-# RENDERING K8S RESOURCE TEMPLATES
-# ------------------------------------------------------------------------------
+# # ------------------------------------------------------------------------------
+# # RENDERING K8S RESOURCE TEMPLATES
+# # ------------------------------------------------------------------------------
 
 resource "local_file" "k8s_backend_templates" {
   for_each = fileset(
-    "${path.module}",
-    "templates/k8s/backend/*.yaml"
+    "${path.module}/templates",
+    "k8s/backend/*.yaml"
   )
 
-  content = templatefile("${path.module}/${each.key}", {
-    # resource_labels    = trimspace(indent(4, yamlencode(var.resource_labels)))
-    certificate_domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
-    image_name         = "backstage/backend"
-    image_tag          = "latest"
-    metadata_name      = "backend"
-    metadata_namespace = local.backstage_cluster_namespace
-    repository_link    = local.respository_link
-    resource_labels = merge(var.resource_labels, {
-      component = "backend"
-    })
+  content = templatefile("${path.module}/templates/${each.key}", {
+    backstage__backend__certificate__name   = local.cluster__namepsace__backstage__component__backend__certificate__name
+    backstage__backend__certificate__domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
+    backstage__backend__container__image    = "${local.cluster__artifact__registry__link}/${local.cluster__namespace__backstage__component__backend__image__name}:${local.cluster__namespace__backstage__component__backend__image__tag}"
+    backstage__backend__container__name     = local.cluster__namespace__backstage__component__backend__container__name
+    backstage__backend__container__port     = 7007
+    backstage__backend__deployment__name    = local.cluster__namespace__backstage__component__backend__deployment__name
+    backstage__backend__frontend__name      = local.cluster__namespace__backstage__component__backend__frontend__name
+    backstage__backend__ingress__name       = local.cluster__namespace__backstage__component__backend__ingress__name
+    backstage__backend__ingress__address    = local.cluster__namespace__backstage__component__backend__lb_address__name
+    backstage__backend__hpa__name           = local.cluster__namespace__backstage__component__backend__hpa__name
+    backstage__backend__labels              = local.cluster__namespace__backstage__component__backend__labels
+    backstage__backend__service__name       = local.cluster__namespace__backstage__component__backend__service__name
+    backstage__backend__service__port       = 7007
+    backstage__secret__database_credentials = local.cluster__namespace__backstage__secret__database_credentials__name
+    backstage__namespace__name              = local.cluster__namespace__backstage__name
+    backstage__service_account__name        = local.cluster__workload_identity__kubernetes_service_account__name
   })
 
-  filename = "./rendered/${each.key}"
+  filename        = "./rendered/${each.key}"
+  file_permission = "0644"
 }

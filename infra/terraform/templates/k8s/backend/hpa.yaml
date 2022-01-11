@@ -1,17 +1,17 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: ${metadata_name}
-  namespace: ${metadata_namespace}
+  name: ${backstage__backend__hpa__name}
+  namespace: ${backstage__namespace__name}
   labels:
-%{ for key, value in resource_labels ~}
+%{ for key, value in backstage__backend__labels ~}
     ${key}: ${value}
 %{ endfor ~}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ${metadata_name}
+    name: ${backstage__backend__deployment__name}
   minReplicas: 2
   maxReplicas: 128
   metrics:

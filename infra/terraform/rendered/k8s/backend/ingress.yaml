@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backstage-backend-ingress
+  namespace: backstage
+  labels:
+    application: backstage
+    component: backstage-backend
+    environment: poc
+    team: breu
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: backstage-backend-loadbalancer-address-55f14ee8
+    networking.gke.io/managed-certificates: backstage-backend-certificate
+    networking.gke.io/v1beta1.FrontendConfig: backstage-backend-frontend
+spec:
+  defaultBackend:
+    service:
+      name: backstage-backend-service
+      port:
+        number: 7007

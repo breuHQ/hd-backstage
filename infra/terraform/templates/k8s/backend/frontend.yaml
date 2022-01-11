@@ -1,0 +1,13 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: ${backstage__backend__frontend__name}
+  namespace: ${backstage__namespace__name}
+  labels:
+%{ for key, value in backstage__backend__labels ~}
+    ${key}: ${value}
+%{ endfor ~}
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: PERMANENT_REDIRECT

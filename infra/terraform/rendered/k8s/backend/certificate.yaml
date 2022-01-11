@@ -1,0 +1,13 @@
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: backstage-backend-certificate
+  namespace: backstage
+  labels:
+    application: backstage
+    component: backstage-backend
+    environment: poc
+    team: breu
+spec:
+  domains:
+    - backend.hd.dev.breu.io

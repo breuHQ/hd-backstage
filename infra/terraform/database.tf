@@ -7,16 +7,16 @@ module "db" {
 
   project              = var.project
   region               = var.region
-  name                 = local.computed_name
-  db_name              = var.db_name
-  master_user_name     = var.db_user
-  master_user_password = local.db_password
+  name                 = local.database__instance_name
+  db_name              = local.database__database_name
+  master_user_name     = local.database__user
+  master_user_password = local.database__password
   engine               = var.db_engine
   machine_type         = var.db_machine_type
   disk_autoresize      = true
   deletion_protection  = false
   private_network      = google_compute_network.backstage.self_link
-  dependencies         = [google_service_networking_connection.backstage_vpc_connection.network]
+  dependencies         = [google_service_networking_connection.backstage_peering_connection.network]
 
   database_flags = [
     {

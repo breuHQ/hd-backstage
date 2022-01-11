@@ -1,12 +1,13 @@
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
-  name: ${metadata_name}
-  namespace: ${metadata_namespace}
+  name: backstage-backend-frontend
+  namespace: backstage
   labels:
-%{ for key, value in resource_labels ~}
-    ${key}: ${value}
-%{ endfor ~}
+    application: backstage
+    component: backstage-backend
+    environment: poc
+    team: breu
 spec:
   redirectToHttps:
     enabled: true

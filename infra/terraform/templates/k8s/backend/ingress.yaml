@@ -1,20 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${metadata_name}
-  namespace: ${metadata_namespace}
+  name: ${backstage__backend__ingress__name}
+  namespace: ${backstage__namespace__name}
   labels:
-%{ for key, value in resource_labels ~}
+%{ for key, value in backstage__backend__labels ~}
     ${key}: ${value}
 %{ endfor ~}
   annotations:
     kubernetes.io/ingress.allow-http: "false"
-    kubernetes.io/ingress.global-static-ip-name: ${metadata_name}
-    networking.gke.io/managed-certificates: ${metadata_name}
-    networking.gke.io/v1beta1.FrontendConfig: ${metadata_name}
+    kubernetes.io/ingress.global-static-ip-name: ${backstage__backend__ingress__address}
+    networking.gke.io/managed-certificates: ${backstage__backend__certificate__name}
+    networking.gke.io/v1beta1.FrontendConfig: ${backstage__backend__frontend__name}
 spec:
   defaultBackend:
     service:
-      name: ${metadata_name}
+      name: ${backstage__backend__service__name}
       port:
-        number: 7007
+        number: ${backstage__backend__service__port}

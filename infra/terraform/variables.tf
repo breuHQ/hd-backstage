@@ -8,7 +8,7 @@ variable "region" {
   default     = "europe-west3"
 }
 
-variable "name_prefix" {
+variable "name" {
   description = "The prefix of items in your Google Cloud Platform project."
   default     = "backstage"
 }
@@ -32,6 +32,11 @@ variable "db_machine_type" {
   description = "The machine type to use, see https://cloud.google.com/sql/pricing for more details"
   type        = string
   default     = "db-f1-micro"
+}
+
+variable "dns_zone" {
+  description = "The DNS zone to use for the Cloud DNS"
+  default     = "hd-backstage-poc-28107.eu"
 }
 
 variable "service_account_roles" {
