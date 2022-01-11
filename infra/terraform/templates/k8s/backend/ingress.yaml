@@ -11,7 +11,7 @@ metadata:
     kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.global-static-ip-name: ${backstage__backend__ingress__address}
     networking.gke.io/managed-certificates: ${backstage__backend__certificate__name}
-    networking.gke.io/v1beta1.FrontendConfig: ${backstage__backend__frontend__name}
+    networking.gke.io/v1beta1.FrontendConfig: ${backstage__backend__frontend_config__name}
 spec:
   defaultBackend:
     service:

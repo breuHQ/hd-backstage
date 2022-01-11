@@ -1,26 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backstage-backend
+  name: backstage-backend-deployment
   namespace: backstage
   labels:
-    app: backstage-backend
+    application: backstage
+    component: backstage-backend
+    environment: poc
+    team: breu
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: backstage-backend
+      application: backstage
+      component: backstage-backend
+      environment: poc
+      team: breu
   template:
     metadata:
       labels:
-        app: backstage-backend
+        application: backstage
+        component: backstage-backend
+        environment: poc
+        team: breu
     spec:
-      serviceAccountName: backstage
+      serviceAccountName: backstage-workload-identity-55f14ee8
       imagePullSecrets:
         - name: docker
       containers:
         - name: backstage-backend
-          image: europe-west3-docker.pkg.dev/hd-backstage-poc-28107/backstage-96b1cd00/backstage/backend:latest
+          image: europe-west3-docker.pkg.dev/hd-backstage-poc-28107/backstage-55f14ee8/backstage/backend:latest
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -46,26 +55,25 @@ spec:
               cpu: "250m"
               memory: "256Mi"
           ports:
-            - name: http
-              containerPort: 7007
+            -  containerPort: 7007
           env:
             - name: BACKSTAGE_DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: backstage-db-credentials
+                  name: backstage-database-credentials-55f14ee8
                   key: db_host
             - name: BACKSTAGE_DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: backstage-db-credentials
+                  name: backstage-database-credentials-55f14ee8
                   key: db_port
             - name: BACKSTAGE_DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: backstage-db-credentials
+                  name: backstage-database-credentials-55f14ee8
                   key: db_user
             - name: BACKSTAGE_DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: backstage-db-credentials
+                  name: backstage-database-credentials-55f14ee8
                   key: db_pass
