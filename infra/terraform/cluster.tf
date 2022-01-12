@@ -140,8 +140,8 @@ resource "kubernetes_secret" "artifact_registry_credentials" {
 
   data = {
     ".dockerconfigjson" = jsonencode({
-      "auths" : {
-        "https://europe-west3-docker.pkg.dev" : {
+      auths = {
+        "https://europe-west3-docker.pkg.dev" = {
           email    = local.cluster__workload_identity__google_service_account__email
           username = "_json_key"
           password = trimspace(local.cluster__workload_identity__google_service_account__key)
