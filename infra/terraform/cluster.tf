@@ -224,21 +224,21 @@ resource "local_file" "k8s_backend_templates" {
   )
 
   content = templatefile("${path.module}/templates/${each.key}", {
-    backstage__backend__certificate__name     = local.cluster__namepsace__backstage__component__backend__certificate__name
     backstage__backend__certificate__domain   = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
+    backstage__backend__certificate__name     = local.cluster__namepsace__backstage__component__backend__certificate__name
     backstage__backend__container__image      = "${local.cluster__artifact__registry__link}/${local.cluster__namespace__backstage__component__backend__image__name}:${local.cluster__namespace__backstage__component__backend__image__tag}"
     backstage__backend__container__name       = local.cluster__namespace__backstage__component__backend__container__name
     backstage__backend__container__port       = 7007
     backstage__backend__deployment__name      = local.cluster__namespace__backstage__component__backend__deployment__name
     backstage__backend__frontend_config__name = local.cluster__namespace__backstage__component__backend__frontend__name
-    backstage__backend__ingress__name         = local.cluster__namespace__backstage__component__backend__ingress__name
-    backstage__backend__ingress__address      = local.cluster__namespace__backstage__component__backend__lb_address__name
     backstage__backend__hpa__name             = local.cluster__namespace__backstage__component__backend__hpa__name
+    backstage__backend__ingress__address      = local.cluster__namespace__backstage__component__backend__lb_address__name
+    backstage__backend__ingress__name         = local.cluster__namespace__backstage__component__backend__ingress__name
     backstage__backend__labels                = local.cluster__namespace__backstage__component__backend__labels
     backstage__backend__service__name         = local.cluster__namespace__backstage__component__backend__service__name
     backstage__backend__service__port         = 7007
-    backstage__secret__database_credentials   = local.cluster__namespace__backstage__secret__database_credentials__name
     backstage__namespace__name                = local.cluster__namespace__backstage__name
+    backstage__secret__database_credentials   = local.cluster__namespace__backstage__secret__database_credentials__name
     backstage__service_account__name          = local.cluster__workload_identity__kubernetes_service_account__name
   })
 
