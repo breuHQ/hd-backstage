@@ -1,5 +1,16 @@
 # Backstage.io
 
+## Architecture Overview
+Backstage is constructed out of three parts.
+
+### Core 
+Base functionality built by core developers in the open source project.
+### App 
+The app is an instance of a Backstage app that is deployed and tweaked. The app ties together core functionality with additional plugins. The app is built and maintained by app developers, usually a productivity team within a company.
+### Plugins 
+Additional functionality to make your Backstage app useful for your company. Plugins can be specific to a company or open sourced and reusable. 
+
+
 ## Getting Started
 To deploy Backstage locally in development mode, a basic understanding of working on a Linux based OS using tools like npm, yarn, docker is required. 
 
@@ -153,6 +164,34 @@ When the installation is complete and docker image is built, you can open the ap
 yarn start
 ```
 When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000. 
+
+## Terraform and Kubernetes
+Kubernetes is a system for deploying, scaling and managing containerized applications. Backstage is designed to fit this model and run as a stateless application with an external PostgreSQL database.
+### Repo Organization
+
+This repo has the following folder structure:
+
+- [root](https://github.com/gruntwork-io/terraform-google-sql/tree/master): The root folder contains an example of how
+  to deploy a private PostgreSQL instance in Cloud SQL. See [postgres-private-ip](https://github.com/gruntwork-io/terraform-google-sql/blob/master/examples/postgres-private-ip)
+  for the documentation.
+
+- [modules](https://github.com/gruntwork-io/terraform-google-sql/tree/master/modules): This folder contains the
+  main implementation code for this Module, broken down into multiple standalone submodules.
+
+  The primary module is:
+
+  - [cloud-sql](https://github.com/gruntwork-io/terraform-google-sql/tree/master/modules/cloud-sql): Deploy a Cloud SQL [MySQL](https://cloud.google.com/sql/docs/mysql/) or [PostgreSQL](https://cloud.google.com/sql/docs/postgres/) database.
+
+- [examples](https://github.com/gruntwork-io/terraform-google-sql/tree/master/examples): This folder contains
+  examples of how to use the submodules.
+
+- [test](https://github.com/gruntwork-io/terraform-google-sql/tree/master/test): Automated tests for the submodules
+  and examples.
+
+### Deployment
+There are many different tools and patterns for Kubernetes clusters, so the best way to deploy to an existing Kubernetes setup is the same way you deploy everything else.
+
+
 
 
 
