@@ -191,8 +191,43 @@ This repo has the following folder structure:
 ### Deployment
 There are many different tools and patterns for Kubernetes clusters, so the best way to deploy to an existing Kubernetes setup is the same way you deploy everything else.
 
+#### Creating Namespace through kubectl
+```bash
+kubectl create namespace backstage namespace/backstage created
 
+kubectl apply -f kubernetes/namespace.yaml
+namespace/backstage created
+```
 
+#### Creating a Backstage Deployment 
+To create the Backstage deployment, first create a Docker image. We'll use this image to create a Kubernetes deployment.
+For testing locally with minikube, you can point the local Docker daemon to the minikube internal Docker registry and then rebuild the image to install it:
+```bash
+eval $(minikube docker-env)
+yarn build-image --tag backstage:1.0.0
+```
+Since it's running on the same cluster, Kubernetes will inject POSTGRES_SERVICE_HOST and POSTGRES_SERVICE_PORT environment variables into our Backstage container. These can be used in the Backstage app-config.yaml along with the secrets:
+```bash
+backend:
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_SERVICE_HOST}
+      port: ${POSTGRES_SERVICE_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+```
+Make sure to rebuild the Docker image after applying app-config.yaml changes.
+
+Apply this Deployment to the Kubernetes cluster:
+
+```bash
+kubectl apply -f kubernetes/backstage.yaml
+
+kubectl get deployments --namespace=backstage
+
+kubectl get pods --namespace=backstage
+```
 
 
 
