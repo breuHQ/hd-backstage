@@ -57,20 +57,25 @@ spec:
             - name: BACKSTAGE_DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: ${backstage__secret__database_credentials}
+                  name: ${backstage__secret__application_credentials}
                   key: db_host
             - name: BACKSTAGE_DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: ${backstage__secret__database_credentials}
+                  name: ${backstage__secret__application_credentials}
                   key: db_port
             - name: BACKSTAGE_DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: ${backstage__secret__database_credentials}
+                  name: ${backstage__secret__application_credentials}
                   key: db_user
             - name: BACKSTAGE_DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: ${backstage__secret__database_credentials}
+                  name: ${backstage__secret__application_credentials}
                   key: db_pass
+            - name: BACKSTAGE_APP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: app_url

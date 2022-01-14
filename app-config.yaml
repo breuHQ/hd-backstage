@@ -1,6 +1,7 @@
 app:
   title: HD Digital Landscape
-  baseUrl: https://hd-backstage-poc-28107.web.app
+  # baseUrl: https://hd-backstage-poc-28107.web.app
+  baseUrl: ${BACKSTAGE_APP_URL}
 
 organization:
   name: HD Digital

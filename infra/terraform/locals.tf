@@ -24,7 +24,14 @@ resource "random_password" "db_password" {
 # ------------------------------------------------------------------------------
 
 locals {
-  dns__zone__name = "hd.dev.breu.io."
+  dns_zone__name                               = "hd.dev.breu.io."
+  dns_zone__record_set__firebase_hosting__name = "backstage"
+  dns_zone__record_set__firebase_hosting__data = ["199.36.158.100"]
+  dns_zone__record_set__firebase_hosting__type = "A"
+  dns_zone__record_set__backend__data          = [google_compute_global_address.backend_cluster_backend_loadbalancer_address.address]
+  dns_zone__record_set__backend__name          = "backend"
+  dns_zone__record_set__backend__type          = "A"
+
 
   /**
    * Network
@@ -71,20 +78,22 @@ locals {
 
   cluster__node_pool__backstage__name = "${var.name}-${random_id.suffix.hex}"
 
-  cluster__namepsace__backstage__component__backend__certificate__name = "backstage-backend-certificate"
-  cluster__namespace__backstage__component__backend__container__name   = "backstage-backend"
-  cluster__namespace__backstage__component__backend__deployment__name  = "backstage-backend-deployment"
-  cluster__namespace__backstage__component__backend__frontend__name    = "backstage-backend-frontend"
-  cluster__namespace__backstage__component__backend__hpa__name         = "backstage-backend-hpa"
-  cluster__namespace__backstage__component__backend__image__name       = "backstage/backend"
-  cluster__namespace__backstage__component__backend__image__tag        = "latest"
-  cluster__namespace__backstage__component__backend__ingress__name     = "backstage-backend-ingress"
-  cluster__namespace__backstage__component__backend__labels            = merge(var.resource_labels, { component = local.cluster__namespace__backstage__component__backend__name })
-  cluster__namespace__backstage__component__backend__lb_address__name  = "${var.name}-backend-loadbalancer-address-${random_id.suffix.hex}"
-  cluster__namespace__backstage__component__backend__name              = "backstage-backend"
-  cluster__namespace__backstage__component__backend__service__name     = "backstage-backend-service"
-  cluster__namespace__backstage__name                                  = var.name
-  cluster__namespace__backstage__secret__database_credentials__name    = "${var.name}-database-credentials-${random_id.suffix.hex}"
+  cluster__namepsace__backstage__component__backend__certificate__name   = "backstage-backend-certificate"
+  cluster__namespace__backstage__component__backend__certificate__domain = trimsuffix(google_dns_record_set.backstage_backend.name, ".")
+  cluster__namespace__backstage__component__backend__container__name     = "backstage-backend"
+  cluster__namespace__backstage__component__backend__deployment__name    = "backstage-backend-deployment"
+  cluster__namepsace__backstage__component__backend__env__app_url        = "https://${trimsuffix(google_dns_record_set.backstage_firebase_hosting.name, ".")}"
+  cluster__namespace__backstage__component__backend__frontend__name      = "backstage-backend-frontend"
+  cluster__namespace__backstage__component__backend__hpa__name           = "backstage-backend-hpa"
+  cluster__namespace__backstage__component__backend__image__name         = "backstage/backend"
+  cluster__namespace__backstage__component__backend__image__tag          = "latest"
+  cluster__namespace__backstage__component__backend__ingress__name       = "backstage-backend-ingress"
+  cluster__namespace__backstage__component__backend__labels              = merge(var.resource_labels, { component = local.cluster__namespace__backstage__component__backend__name })
+  cluster__namespace__backstage__component__backend__lb_address__name    = "${var.name}-backend-loadbalancer-address-${random_id.suffix.hex}"
+  cluster__namespace__backstage__component__backend__name                = "backstage-backend"
+  cluster__namespace__backstage__component__backend__service__name       = "backstage-backend-service"
+  cluster__namespace__backstage__name                                    = var.name
+  cluster__namespace__backstage__secret__application_credentials__name   = "${var.name}-application-credentials-${random_id.suffix.hex}"
 
   cluster__workload_identity__google_service_account__name     = "${var.name}-cluster-${random_id.suffix.hex}"
   cluster__workload_identity__google_service_account__email    = google_service_account.backstage_cluster_workload_identity.email
