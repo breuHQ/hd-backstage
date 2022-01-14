@@ -9,7 +9,7 @@ metadata:
     environment: poc
     team: breu
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       application: backstage

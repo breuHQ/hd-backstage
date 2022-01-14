@@ -8,7 +8,7 @@ metadata:
     ${key}: ${value}
 %{ endfor ~}
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
 %{ for key, value in backstage__backend__labels ~}

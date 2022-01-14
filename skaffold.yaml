@@ -11,6 +11,9 @@ build:
     hooks:
       before:
         - command: ["yarn", "build"]
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
 deploy:
   kubectl:
     manifests:
