@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: backstage
+build:
+  artifacts:
+  - image: europe-west3-docker.pkg.dev/hd-backstage-poc-28107/backstage-55f14ee8/backstage/backend
+    context: .
+    docker:
+      dockerfile: packages/backend/Dockerfile
+    hooks:
+      before:
+        - command: ["yarn", "build"]
+deploy:
+  kubectl:
+    manifests:
+    - infra/k8s/backend/certificate.yaml
+    - infra/k8s/backend/deployment.yaml
+    - infra/k8s/backend/frontend-config.yaml
+    - infra/k8s/backend/hpa.yaml
+    - infra/k8s/backend/ingress.yaml
+    - infra/k8s/backend/svc.yaml
