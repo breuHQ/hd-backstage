@@ -22,7 +22,6 @@ docker-compose up
 
 Now in a new terminal, run:
 ```bash
-cd core
 yarn build
 yarn start 
 ```
