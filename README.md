@@ -153,7 +153,3 @@ When the installation is complete and docker image is built, you can open the ap
 yarn start
 ```
 When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000. 
-
-
-
-
