@@ -25,7 +25,6 @@ output "dns_managed_zone_name_servers" {
 output "network_peering_address" {
   value = google_compute_global_address.backstage_peering_range_address.address
 }
-
-# output "suffix" {
-#   value = random_id.suffix.hex
-# }
+output "cmd_kubeconfig_update" {
+  value = "gcloud container clusters get-credentials ${module.backstage_gke.name} --region ${var.region}"
+}

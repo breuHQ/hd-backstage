@@ -78,6 +78,7 @@ module "backstage_gke" {
       "https://www.googleapis.com/auth/sqlservice.admin",
     ]
   }
+
   node_pools_labels = {
     all = var.resource_labels
   }
@@ -214,15 +215,12 @@ resource "kubernetes_secret" "backstage_database_credentials" {
   }
 }
 
-# # ------------------------------------------------------------------------------
-# # RENDERING K8S RESOURCE TEMPLATES
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# RENDERING K8S RESOURCE TEMPLATES
+# ------------------------------------------------------------------------------
 
 resource "local_file" "k8s_backend_templates" {
-  for_each = fileset(
-    "${path.module}/templates",
-    "k8s/backend/*.yaml"
-  )
+  for_each = fileset("${path.module}/templates", "k8s/backend/*.yaml")
 
   content = templatefile("${path.module}/templates/${each.key}", {
     backstage__backend__certificate__domain    = local.cluster__namespace__backstage__component__backend__certificate__domain

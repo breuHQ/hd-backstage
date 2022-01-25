@@ -1,58 +1,73 @@
 # Backstage.io
 
 ## Getting Started
-To deploy Backstage locally in development mode, a basic understanding of working on a Linux based OS using tools like npm, yarn, docker is required. 
+
+To deploy Backstage locally in development mode, a basic understanding of working on a Linux based OS using tools like npm, yarn, docker is required.
 
 ## Quick Start
+
 In main directory, run:
-```bash  
+
+```bash
 docker-compose up
 ```
 
 Now in a new terminal, run:
+
 ```bash
 cd core
 yarn build
-yarn start 
+yarn start
 ```
-When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000. 
 
-## Prerequisites 
+When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000
+
+## Prerequisites
 
 ### Node.js
+
 First make sure you are using Node.js with an Active LTS Release, currently v14. This is made easy with a version manager such as nvm which allows for version switching.
 
-```bash 
+```bash
 nvm --version
-nvm install v14.17.6  
+nvm install v14.17.6
 nvm use v14.17.6
 ```
-or 
-```bash 
+
+or
+
+```bash
 nvm alias default 14.17.6
 ```
 
-### Yarn 
+### Yarn
+
 Yarn is used to fetch our dependencies and run an initial build. Please refer to the [installation instructions for Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable).
 
-If yarn is installed, check the version by running: 
+If yarn is installed, check the version by running:
+
 ```bash
-yarn --version 
+yarn --version
 ```
+
 Yarn version used is v1.22.17.
 
 ### PostgreSQL
-Something that goes for all of these docker deployment strategies is that they are stateless, so for a production deployment you will want to set up and connect to an external PostgreSQL instance. 
 
-### Docker 
-We use Docker for few of our core features. So, you will need Docker installed locally to use features like Software Templates and TechDocs.  Please refer to the [installation instructions for Docker](https://docs.docker.com/engine/install/).
+Something that goes for all of these docker deployment strategies is that they are stateless, so for a production deployment you will want to set up and connect to an external PostgreSQL instance.
 
-###  Ports
-The following ports need to be opened: 3000, 7007. 
+### Docker
+
+We use Docker for few of our core features. So, you will need Docker installed locally to use features like Software Templates and TechDocs. Please refer to the [installation instructions for Docker](https://docs.docker.com/engine/install/).
+
+### Ports
+
+The following ports need to be opened: 3000, 7007.
 
 If the database is not hosted on the same server as the Backstage app, the PostgreSQL port needs to be accessible (the default is 5432 or 5433).
 
 ## Environment Variables
+
 Before you get started, make sure the following environment variables are present.
 You can set environment variables with the following commands in the main directory:
 
@@ -60,36 +75,41 @@ You can set environment variables with the following commands in the main direct
 touch .env
 ```
 
-Copy and paste the following: 
-```ini 
+Copy and paste the following:
+
+```ini
 BACKSTAGE_DB_HOST=localhost
 BACKSTAGE_DB_PORT=5432
 BACKSTAGE_DB_USER=backstage
 BACKSTAGE_DB_PASS=backstage
 BACKSTAGE_DB_NAME=backstage
 ```
+
 ---
-| Variable	            | Description 	     |        Default Value 
-| --------------------- | ------------------ | ----------------------- |
-| BACKSTAGE_DB_HOST	    | Database Host Name | localhost
-| BACKSTAGE_DB_PORT	    | Database port 	 | 5432
-| BACKSTAGE_DB_USER	    | Database username  | backstage
-| BACKSTAGE_DB_PASS 	| Database password	 | backstage 
-| BACKSTAGE_DB_NAME 	| Database name 	 | backstage
+
+| Variable          | Description        | Default Value |
+| ----------------- | ------------------ | ------------- |
+| BACKSTAGE_DB_HOST | Database Host Name | localhost     |
+| BACKSTAGE_DB_PORT | Database port      | 5432          |
+| BACKSTAGE_DB_USER | Database username  | backstage     |
+| BACKSTAGE_DB_PASS | Database password  | backstage     |
+| BACKSTAGE_DB_NAME | Database name      | backstage     |
+
 ---
 
 ## Deploying Backstage
-Backstage provides tooling to build Docker images. This section describes how to build a Backstage App into a deployable Docker image. 
 
+Backstage provides tooling to build Docker images. This section describes how to build a Backstage App into a deployable Docker image.
 
-###	Host Build
+### Host Build
+
 The required steps in the host build are to install dependencies with `yarn install`, generate type definitions using `yarn tsc`, and build all packages with `yarn build`.
 
 ```bash
 yarn install --frozen-lockfile
 ```
 
-tsc outputs type definitions to dist-types/ in the repo root, which are then consumed by the build: 
+tsc outputs type definitions to dist-types/ in the repo root, which are then consumed by the build:
 
 ```bash
 yarn tsc
@@ -145,11 +165,15 @@ docker run -it -p 7007:7007 backstage
 
 docker-compose up
 ```
-You should then start to get logs in your terminal, and then you can open your browser at http://localhost:7007. 
+
+You should then start to get logs in your terminal, and then you can open your browser at http://localhost:7007.
 
 ## Run the App
+
 When the installation is complete and docker image is built, you can open the app folder and start the app.
-```bash 
+
+```bash
 yarn start
 ```
-When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000. 
+
+When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000.
