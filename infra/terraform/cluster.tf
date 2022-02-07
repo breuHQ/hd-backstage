@@ -76,6 +76,7 @@ module "backstage_gke" {
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/sqlservice.admin",
+      "https://www.googleapis.com/auth/trace.append",
     ]
   }
 

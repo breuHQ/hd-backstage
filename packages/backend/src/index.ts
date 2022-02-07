@@ -5,7 +5,6 @@
  *
  * Happy hacking!
  */
-
 import Router from 'express-promise-router';
 import {
   createServiceBuilder,
@@ -29,6 +28,7 @@ import proxy from './plugins/proxy';
 import techdocs from './plugins/techdocs';
 import search from './plugins/search';
 import { PluginEnvironment } from './types';
+import { tracer } from './tracer';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -50,6 +50,7 @@ function makeCreateEnv(config: Config) {
 }
 
 async function main() {
+  tracer('backstage-backend');
   const config = await loadBackendConfig({
     argv: process.argv,
     logger: getRootLogger(),
