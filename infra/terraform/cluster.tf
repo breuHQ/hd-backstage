@@ -208,11 +208,12 @@ resource "kubernetes_secret" "backstage_database_credentials" {
   }
 
   data = {
-    db_host = module.db.master_private_ip_address
-    db_port = 5432
-    db_user = local.database__user
-    db_pass = local.database__password
-    app_url = local.cluster__namepsace__backstage__component__backend__env__app_url
+    db_host     = module.db.master_private_ip_address
+    db_port     = 5432
+    db_user     = local.database__user
+    db_pass     = local.database__password
+    app_url     = local.cluster__namepsace__backstage__component__backend__env__app_url
+    backend_url = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
   }
 }
 

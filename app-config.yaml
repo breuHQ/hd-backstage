@@ -12,7 +12,9 @@ backend:
   # auth:
   #   keys:
   #     - secret: ${BACKEND_SECRET}
-  baseUrl: https://backend.hd.dev.breu.io
+  # baseUrl: https://backend.hd.dev.breu.io
+  # baseUrl: http://localhost:7007
+  baseUrl: ${BACKSTAGE_BACKEND_URL}
   listen:
     port: 7007
   csp:

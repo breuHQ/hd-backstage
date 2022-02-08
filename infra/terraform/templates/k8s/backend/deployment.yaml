@@ -79,3 +79,8 @@ spec:
                 secretKeyRef:
                   name: ${backstage__secret__application_credentials}
                   key: app_url
+            - name: BACKSTAGE_BACKEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: backend_url
