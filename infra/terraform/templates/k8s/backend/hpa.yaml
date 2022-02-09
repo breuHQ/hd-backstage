@@ -32,13 +32,13 @@ spec:
         #   averageValue: 384Mi
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 180 # scale down slowly
+      stabilizationWindowSeconds: 60 # scale down slowly
       policies:
         - type: Percent
           value: 200 # Half of the pods are scaled down
           periodSeconds: 15
     scaleUp:
-      stabilizationWindowSeconds: 30 # scale up quickly
+      stabilizationWindowSeconds: 10 # scale up quickly
       policies:
         - type: Percent
           value: 400 # 4 x the pods are scaled up

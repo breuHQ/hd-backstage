@@ -49,10 +49,10 @@ spec:
             timeoutSeconds: 15
           resources:
             requests:
-              cpu: "250m"
+              cpu: "128m"
               memory: "256Mi"
             limits:
-              cpu: "250m"
+              cpu: "192m"
               memory: "256Mi"
           ports:
             -  containerPort: 7007
