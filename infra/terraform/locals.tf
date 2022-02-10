@@ -12,6 +12,16 @@ resource "random_id" "suffix" {
   }
 }
 
+resource "random_id" "db" {
+  byte_length = 4
+
+  keepers = {
+    project = var.project,
+    region  = var.region,
+    prefix  = var.name,
+  }
+}
+
 resource "random_password" "db_password" {
   length = 16
 }
@@ -62,7 +72,7 @@ locals {
    * Database
    **/
 
-  database__instance_name = "${var.name}-poc-${random_id.suffix.hex}"
+  database__instance_name = "${var.name}-poc-${random_id.db.hex}"
   database__database_name = var.db_name
   database__user          = var.db_user
   database__password      = random_password.db_password.result

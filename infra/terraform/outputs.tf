@@ -3,19 +3,23 @@ output "artifiact_repository_link" {
 }
 
 output "db_instance" {
-  value = module.db.master_instance_name
+  value = module.db.instance_name
 }
 
-output "database_instance_private_ip" {
-  value = module.db.master_private_ip_address
+output "db_instance_ip_address" {
+  value = module.db.instance_ip_address[0].ip_address
 }
 
-output "db_instance_link" {
-  value = module.db.master_instance
+output "db_instance_private_ip_address" {
+  value = module.db.private_ip_address
+}
+
+output "db_instance_self_link" {
+  value = module.db.instance_self_link
 }
 
 output "db_instance_proxy_connection" {
-  value = module.db.master_proxy_connection
+  value = module.db.instance_connection_name
 }
 
 output "dns_managed_zone_name_servers" {

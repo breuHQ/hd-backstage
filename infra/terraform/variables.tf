@@ -28,7 +28,17 @@ variable "db_engine" {
   default     = "POSTGRES_14"
 }
 
-variable "db_machine_type" {
+variable "db_flags" {
+  description = "The database flags, see https://cloud.google.com/sql/docs/postgres/flags"
+  default = [
+    {
+      name  = "max_connections"
+      value = "100"
+    }
+  ]
+}
+
+variable "db_tier" {
   description = "The machine type to use, see https://cloud.google.com/sql/pricing for more details"
   type        = string
   default     = "db-f1-micro"

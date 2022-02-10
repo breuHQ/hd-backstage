@@ -24,7 +24,7 @@ provider "kubernetes" {
 }
 
 module "backstage_gke" {
-  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v18.0.0"
+  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/private-cluster?ref=v19.0.0"
   project_id                = var.project
   name                      = local.cluster__name
   region                    = var.region
@@ -65,7 +65,7 @@ module "backstage_gke" {
       auto_upgrade       = true
       service_account    = local.cluster__workload_identity__google_service_account__email
       initial_node_count = 1
-      preemptible        = true
+      preemptible        = false
     },
   ]
 
@@ -207,7 +207,7 @@ resource "kubernetes_secret" "backstage_database_credentials" {
   }
 
   data = {
-    db_host     = module.db.master_private_ip_address
+    db_host     = module.db.private_ip_address
     db_port     = 5432
     db_user     = local.database__user
     db_pass     = local.database__password
