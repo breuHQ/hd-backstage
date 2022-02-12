@@ -46,7 +46,7 @@ variable "db_tier" {
 
 variable "dns_zone" {
   description = "The DNS zone to use for the Cloud DNS"
-  default     = "hd-backstage-poc-28107.eu"
+  default     = "hd.dev.breu.io."
 }
 
 variable "service_account_roles" {

@@ -34,14 +34,13 @@ resource "random_password" "db_password" {
 # ------------------------------------------------------------------------------
 
 locals {
-  dns_zone__name                               = "hd.dev.breu.io."
-  dns_zone__record_set__firebase_hosting__name = "backstage"
+  dns_zone__name                               = var.dns_zone
   dns_zone__record_set__firebase_hosting__data = ["199.36.158.100"]
+  dns_zone__record_set__firebase_hosting__name = "backstage"
   dns_zone__record_set__firebase_hosting__type = "A"
   dns_zone__record_set__backend__data          = [google_compute_global_address.backend_cluster_backend_loadbalancer_address.address]
   dns_zone__record_set__backend__name          = "backend"
   dns_zone__record_set__backend__type          = "A"
-
 
   /**
    * Network
@@ -62,6 +61,7 @@ locals {
     }
   }
 
+  # egress to allow traffic to the internet
   network__egress__address__name    = "${var.name}-network-egress-address-${random_id.suffix.hex}"
   network__egress__router__name     = "${var.name}-network-egress-router-${random_id.suffix.hex}"
   network__egress__router_nat__name = "${var.name}-network-egress-router-nat-${random_id.suffix.hex}"
