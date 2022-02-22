@@ -108,5 +108,6 @@ locals {
   cluster__workload_identity__google_service_account__name     = "${var.name}-cluster-${random_id.suffix.hex}"
   cluster__workload_identity__google_service_account__email    = google_service_account.backstage_cluster_workload_identity.email
   cluster__workload_identity__google_service_account__key      = base64decode(google_service_account_key.backstage_cluster_workload_identity_key.private_key)
+  cluster__workload_identity__google_service_account__member   = "serviceAccount:${google_service_account.backstage_cluster_workload_identity.email}"
   cluster__workload_identity__kubernetes_service_account__name = "${var.name}-workload-identity-${random_id.suffix.hex}"
 }
