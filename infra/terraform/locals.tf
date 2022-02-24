@@ -100,7 +100,7 @@ locals {
   cluster__namespace__backstage__component__backend__ingress__name       = "backstage-backend-ingress"
   cluster__namespace__backstage__component__backend__labels              = merge(var.resource_labels, { component = local.cluster__namespace__backstage__component__backend__name })
   cluster__namespace__backstage__component__backend__lb_address__name    = "${var.name}-backend-loadbalancer-address-${random_id.suffix.hex}"
-  cluster__namespace__backstage__component__backend__name                = "backstage-backend"
+  cluster__namespace__backstage__component__backend__name                = "backend"
   cluster__namespace__backstage__component__backend__service__name       = "backstage-backend-service"
   cluster__namespace__backstage__name                                    = var.name
   cluster__namespace__backstage__secret__application_credentials__name   = "${var.name}-application-credentials-${random_id.suffix.hex}"

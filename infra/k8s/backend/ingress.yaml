@@ -5,7 +5,7 @@ metadata:
   namespace: backstage
   labels:
     application: backstage
-    component: backstage-backend
+    component: backend
     environment: poc
     team: breu
   annotations:
