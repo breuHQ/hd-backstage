@@ -42,5 +42,5 @@ spec:
   owner: backstage/breu-dev
   system: backstage/backstage
   dependsOn: 
-    - resource:backstage/ssl-certificate
+    - resource:backstage/certificate
     - resource:backstage/cluster

@@ -16,4 +16,6 @@ spec:
   dependsOn:
     - resource:backstage/database
     - resource:backstage/cluster
+    - resource:backstage/certificate
+    - resource:backstage/loadbalancer
   system: backstage/backstage
