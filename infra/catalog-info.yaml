@@ -1,33 +1,74 @@
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: database
+  name: backstage-network-55f14ee8
+  namespace: backstage
+  description: Backstage Database
+spec:
+  type: network
+  owner: backstage/breu-dev
+  system: backstage/backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: backstage-network-peering-address-55f14ee8
+  namespace: backstage
+  description: Backstage Database
+spec:
+  type: ip
+  owner: backstage/breu-dev
+  system: backstage/backstage
+  dependsOn:
+    - resource:backstage/backstage-network-55f14ee8
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: backstage-poc-35e94176
   namespace: backstage
   description: Backstage Database
 spec:
   type: database
   owner: backstage/breu-dev
   system: backstage/backstage
+  dependsOn:
+    - resource:backstage/backstage-network-55f14ee8
+    - resource:backstage/backstage-network-peering-address-55f14ee8
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: cluster
+  name: backstage-cluster-55f14ee8
   namespace: backstage
   description: Backstage Kubernetes Cluster
 spec:
   type: cluster
   owner: backstage/breu-dev
   system: backstage/backstage
+  dependsOn:
+    - resource:backstage/backstage-network-55f14ee8
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: certificate
+  name: backstage-backend-certificate
   namespace: backstage
   description: Backstage SSL Certificate
 spec:
-  type: loadbalancer
+  type: certificate
+  owner: backstage/breu-dev
+  system: backstage/backstage
+---
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: backstage-backend-loadbalancer-address-55f14ee8
+  namespace: backstage
+  description: Backstage Database
+spec:
+  type: ip
   owner: backstage/breu-dev
   system: backstage/backstage
 ---
@@ -42,5 +83,6 @@ spec:
   owner: backstage/breu-dev
   system: backstage/backstage
   dependsOn: 
-    - resource:backstage/certificate
-    - resource:backstage/cluster
+    - resource:backstage/backstage-backend-loadbalancer-address-55f14ee8
+    - resource:backstage/backstage-backend-certificate
+    - resource:backstage/backstage-cluster-55f14ee8

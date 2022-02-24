@@ -14,8 +14,8 @@ spec:
   owner: backstage/breu-dev
   lifecycle: poc
   dependsOn:
-    - resource:backstage/database
-    - resource:backstage/cluster
-    - resource:backstage/certificate
+    - resource:backstage/backstage-poc-35e94176
+    - resource:backstage/backstage-cluster-55f14ee8
+    - resource:backstage/backstage-backend-certificate
     - resource:backstage/loadbalancer
   system: backstage/backstage
