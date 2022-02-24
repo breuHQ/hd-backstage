@@ -1746,7 +1746,7 @@
     zen-observable "^0.8.15"
     zod "^3.11.6"
 
-"@backstage/core-components@^0.8.9":
+"@backstage/core-components@^0.8.5", "@backstage/core-components@^0.8.9":
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/@backstage/core-components/-/core-components-0.8.9.tgz#3330e02df887ab6c5f24c582c462fcd46cbc5906"
   integrity sha512-SxA0ACKwQIZeUX2vivzAqzQrYZGwfBbZ4pT+Tri5xFIv7zmPWgmEv7Lqun1AW28eh3zIRNXgyhRuB8nDwzJ4Hw==
@@ -1790,7 +1790,7 @@
     zen-observable "^0.8.15"
     zod "^3.11.6"
 
-"@backstage/core-plugin-api@^0.6.1":
+"@backstage/core-plugin-api@^0.6.0", "@backstage/core-plugin-api@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@backstage/core-plugin-api/-/core-plugin-api-0.6.1.tgz#a6fb8110f384ab9405990450956b2c81b88e90b2"
   integrity sha512-DtHY0eG2OQ4QAHVb5y8yDUQXZW9Ot7Fsr4Rpe3BbiLpkXA5hZLXPMThOyz1Y79ZOEC5eiyhUlXL1g6P7ylOKMw==
@@ -2038,7 +2038,7 @@
     react-use "^17.2.4"
     yaml "^1.10.0"
 
-"@backstage/plugin-catalog-react@^0.6.15":
+"@backstage/plugin-catalog-react@^0.6.12", "@backstage/plugin-catalog-react@^0.6.15":
   version "0.6.15"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-catalog-react/-/plugin-catalog-react-0.6.15.tgz#04de88caa4ac2ce2ad000ee34d28b11eda3910b9"
   integrity sha512-8JDM0upFD/WpB6Qs8oIQf99E2yaqbf835IEgt6aY7l4lEzUrtW4007VXPMdDqOwVwhVM4PbTIvyIRzkQpcr89A==
@@ -2498,7 +2498,7 @@
     react-router-dom "6.0.0-beta.0"
     zen-observable "^0.8.15"
 
-"@backstage/theme@^0.2.15":
+"@backstage/theme@^0.2.14", "@backstage/theme@^0.2.15":
   version "0.2.15"
   resolved "https://registry.yarnpkg.com/@backstage/theme/-/theme-0.2.15.tgz#478491c9bca9dca85d5af08767ba512eabcd3669"
   integrity sha512-Srl5q0X47tFofw6wuElkUqtlbYSfA3J3zlfN6jcQF4801mTrFRw+pVxZmrdxayt4gUzCN+me3mO7tij6F6xQUQ==
@@ -3952,6 +3952,22 @@
   dependencies:
     "@lezer/common" "^0.15.0"
 
+"@loblaw/backstage-plugin-gitlab@^0.1.21":
+  version "0.1.21"
+  resolved "https://registry.yarnpkg.com/@loblaw/backstage-plugin-gitlab/-/backstage-plugin-gitlab-0.1.21.tgz#9a634805186b2d121e7feae93f6ca7a3f3c347c6"
+  integrity sha512-nonbYKoZPkTm8vCJqLRSnO8Xztb2T/Mbg6yAXYWYOh0mFY9ynzsiJVmN9Y+iDbJ8QlzyZ+uvJg4RlfVFMYKOww==
+  dependencies:
+    "@backstage/core-components" "^0.8.5"
+    "@backstage/core-plugin-api" "^0.6.0"
+    "@backstage/plugin-catalog-react" "^0.6.12"
+    "@backstage/theme" "^0.2.14"
+    "@material-ui/core" "^4.12.2"
+    "@material-ui/icons" "^4.9.1"
+    "@material-ui/lab" "4.0.0-alpha.60"
+    moment "^2.29.1"
+    react-router "6.0.0-beta.0"
+    react-use "^17.2.4"
+
 "@manypkg/find-root@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@manypkg/find-root/-/find-root-1.1.0.tgz#a62d8ed1cd7e7d4c11d9d52a8397460b5d4ad29f"
@@ -4021,6 +4037,17 @@
   version "4.0.0-alpha.57"
   resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.57.tgz#e8961bcf6449e8a8dabe84f2700daacfcafbf83a"
   integrity sha512-qo/IuIQOmEKtzmRD2E4Aa6DB4A87kmY6h0uYhjUmrrgmEAgbbw9etXpWPVXuRK6AGIQCjFzV6WO2i21m1R4FCw==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@material-ui/utils" "^4.11.2"
+    clsx "^1.0.4"
+    prop-types "^15.7.2"
+    react-is "^16.8.0 || ^17.0.0"
+
+"@material-ui/lab@4.0.0-alpha.60":
+  version "4.0.0-alpha.60"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.60.tgz#5ad203aed5a8569b0f1753945a21a05efa2234d2"
+  integrity sha512-fadlYsPJF+0fx2lRuyqAuJj7hAS1tLDdIEEdov5jlrpb5pp4b+mRDUqQTUxi4inRZHS1bEXpU8QWUhO6xX88aA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/utils" "^4.11.2"
@@ -14433,6 +14460,11 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
+
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 morgan@^1.10.0:
   version "1.10.0"
