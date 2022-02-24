@@ -6,6 +6,7 @@ metadata:
   title: Backend for Backstage
   description: Backend for Backstage
   annotations:
+    backstage.io/techdocs-ref: dir:.
   tags: 
     - typescript
     - service
