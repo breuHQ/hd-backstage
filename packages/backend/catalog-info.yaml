@@ -11,6 +11,6 @@ metadata:
     - service
 spec:
   type: service
-  owner: breu-dev
+  owner: backstage/breu-dev
   lifecycle: poc
-  system: backstage
+  system: backstage/backstage
