@@ -4,7 +4,7 @@ WORKDIR /app
 
 # For MkDocs
 RUN apt-get update && \
-    apt-get install -y python3 cmake g++ && \
+    apt-get install -y python3 python3-pip && \
     rm -rf /var/lib/apt/lists/* && \
     yarn config set python /usr/bin/python3 && \
     pip install --no-cache-dir mkdocs-techdocs-core

@@ -46,7 +46,11 @@ techdocs:
   generator:
     runIn: 'local' # Alternatives - 'local'
   publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: 'googleGcs'
+    googleGcs:
+      bucketName: 'backstage-docs-55f14ee8'
+  # publisher:
+  #   type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
