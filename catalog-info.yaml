@@ -20,6 +20,7 @@ spec:
   targets:
     - ./packages/app/catalog-info.yaml
     - ./packages/backend/catalog-info.yaml
+    - ./infra/catalog-info.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: System
@@ -40,5 +41,4 @@ spec:
   profile:
     displayName: HD Team @ Breu
     email: hd@breu.io
-    picture: https://example.com/groups/bu-infrastructure.jpeg
   children: []

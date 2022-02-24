@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: database
+  namespace: backstage
+  description: Backstage Database
+spec:
+  type: database
+  owner: backstage/breu-dev
+  system: backstage/backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: cluster
+  namespace: backstage
+  description: Backstage Kubernetes Cluster
+spec:
+  type: cluster
+  owner: backstage/breu-dev
+  system: backstage/backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: certificate
+  namespace: backstage
+  description: Backstage SSL Certificate
+spec:
+  type: loadbalancer
+  owner: backstage/breu-dev
+  system: backstage/backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: loadbalancer
+  namespace: backstage
+  description: Backstage LoadBalancer for Kubernetes Cluster
+spec:
+  type: loadbalancer
+  owner: backstage/breu-dev
+  system: backstage/backstage
+  dependsOn: 
+    - resource:backstage/ssl-certificate
+    - resource:backstage/cluster

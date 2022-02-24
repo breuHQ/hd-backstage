@@ -13,4 +13,7 @@ spec:
   type: service
   owner: backstage/breu-dev
   lifecycle: poc
+  dependsOn:
+    - resource:backstage/database
+    - resource:backstage/cluster
   system: backstage/backstage
