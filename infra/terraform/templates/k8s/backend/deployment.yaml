@@ -84,3 +84,13 @@ spec:
                 secretKeyRef:
                   name: ${backstage__secret__application_credentials}
                   key: backend_url
+            - name: GITLAB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: gitlab_token
+            - name: GITLAB_DISCOVERY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: gitlab_discovery_url

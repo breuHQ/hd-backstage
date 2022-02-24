@@ -87,3 +87,13 @@ spec:
                 secretKeyRef:
                   name: backstage-application-credentials-55f14ee8
                   key: backend_url
+            - name: GITLAB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-application-credentials-55f14ee8
+                  key: gitlab_token
+            - name: GITLAB_DISCOVERY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-application-credentials-55f14ee8
+                  key: gitlab_discovery_url

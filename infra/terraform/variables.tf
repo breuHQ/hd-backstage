@@ -71,3 +71,11 @@ variable "resource_labels" {
     team        = "breu"
   }
 }
+
+variable "secret_gitlab_token" {
+  type = string
+}
+
+variable "secret_gitlab_discovery_url" {
+  type = string
+}

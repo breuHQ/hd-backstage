@@ -346,6 +346,7 @@ ehthumbs_vista.db
 
 # Terraform
 .terraform
+*.tfvars
 
 # Windows shortcuts
 *.lnk
