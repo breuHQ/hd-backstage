@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta26
+apiVersion: skaffold/v2beta27
 kind: Config
 metadata:
   name: backstage
@@ -10,7 +10,9 @@ build:
       dockerfile: packages/backend/Dockerfile
     hooks:
       before:
-        - command: ["yarn", "build"]
+      - command:
+        - yarn
+        - build
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
