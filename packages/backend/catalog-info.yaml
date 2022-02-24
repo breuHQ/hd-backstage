@@ -13,3 +13,4 @@ spec:
   type: service
   owner: breu-dev
   lifecycle: poc
+  system: backstage
