@@ -33,6 +33,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: breu-dev
+  namespace: backstage
   description: Breu.io Vendor Team
 spec:
   type: team
