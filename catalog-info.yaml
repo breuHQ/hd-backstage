@@ -1,13 +1,43 @@
+# apiVersion: backstage.io/v1alpha1
+# kind: Component
+# metadata:
+#   name: backstage-core
+#   description: Developer Experience Platform
+#   # Example for optional annotations
+#   # annotations:
+#   #   github.com/project-slug: backstage/backstage
+#   #   backstage.io/techdocs-ref: dir:.
+# spec:
+#   type: service
+#   owner: dev@breu.io
+#   lifecycle: poc 
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: Location
 metadata:
-  name: core
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  name: backstage
+  namespace: backstage
 spec:
-  type: website
-  owner: john@example.com
-  lifecycle: experimental
+  targets:
+    - ./packages/app/catalog-info.yaml
+    - ./packages/backend/catalog-info.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  owner: breu-dev
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: breu-dev
+  description: Breu.io Vendor Team
+spec:
+  type: team
+  profile:
+    displayName: HD Team @ Breu
+    email: hd@breu.io
+    picture: https://example.com/groups/bu-infrastructure.jpeg
+  children: []

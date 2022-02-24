@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backend
+  namespace: backstage
+  title: Backend for Backstage
+  description: Backend for Backstage
+  annotations:
+  tags: 
+    - typescript
+    - service
+spec:
+  type: service
+  owner: breu-dev
+  lifecycle: poc

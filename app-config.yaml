@@ -1,19 +1,11 @@
 app:
   title: HD Digital Landscape
-  # baseUrl: https://hd-backstage-poc-28107.web.app
   baseUrl: ${BACKSTAGE_APP_URL}
 
 organization:
   name: HD Digital
 
 backend:
-  # Used for enabling authentication, secret is shared by all backend plugins
-  # See backend-to-backend-auth.md in the docs for information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
-  # baseUrl: https://backend.hd.dev.breu.io
-  # baseUrl: http://localhost:7007
   baseUrl: ${BACKSTAGE_BACKEND_URL}
   listen:
     port: 7007
@@ -33,9 +25,6 @@ backend:
       port: ${BACKSTAGE_DB_PORT}
       user: ${BACKSTAGE_DB_USER}
       password: ${BACKSTAGE_DB_PASS}
-      # https://node-postgres.com/features/ssl
-      # you can set the sslmode configuration option via the `PGSSLMODE` environment variable
-      # see https://www.postgresql.org/docs/current/libpq-ssl.html Table 33.1. SSL Mode Descriptions (e.g. require)
       # ssl:
       #   ca: # if you have a CA file and want to verify it you can uncomment this section
       #     $file: <file-path>/ca/server.crt
@@ -44,18 +33,9 @@ backend:
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
-
-proxy:
-  '/test':
-    target: 'https://example.com'
-    changeOrigin: true
+  gitlab:
+    - host: gitlab.com
+      token: ${GITLAB_TOKEN}
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -73,34 +53,19 @@ auth:
   providers: {}
 
 scaffolder:
-  github:
-    token: ${GITHUB_TOKEN}
-    visibility: public # or 'internal' or 'private'
+  # github:
+  #   token: ${GITLAB_TOKEN}
+  #   visibility: public # or 'internal' or 'private'
+  gitlab:
+    api:
+      token: ${GITLAB_TOKEN}
 
 catalog:
   rules:
     - allow: [Component, System, API, Group, User, Resource, Location]
   locations:
-    # Backstage example components
-    - type: url
-      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-components.yaml
-
-    # Backstage example systems
-    - type: url
-      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-systems.yaml
-
-    # Backstage example APIs
-    - type: url
-      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-apis.yaml
-
-    # Backstage example resources
-    - type: url
-      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-resources.yaml
-
-    # Backstage example organization groups
-    - type: url
-      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
-
+    - type: gitlab-discovery
+      target: ${GITLAB_DISCOVERY_URL}
     # Backstage example templates
     - type: url
       target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/react-ssr-template/template.yaml
@@ -118,3 +83,25 @@ catalog:
       target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
       rules:
         - allow: [Template]
+
+# catalog:
+#   locations:
+#     # Backstage example components
+#     - type: url
+#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-components.yaml
+
+#     # Backstage example systems
+#     - type: url
+#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-systems.yaml
+
+#     # Backstage example APIs
+#     - type: url
+#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-apis.yaml
+
+#     # Backstage example resources
+#     - type: url
+#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-resources.yaml
+
+#     # Backstage example organization groups
+#     - type: url
+#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
