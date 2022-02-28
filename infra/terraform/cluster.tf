@@ -215,6 +215,7 @@ resource "kubernetes_secret" "backstage_database_credentials" {
     backend_url          = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
     gitlab_token         = var.secret_gitlab_token
     gitlab_discovery_url = var.secret_gitlab_discovery_url
+    service_account_json = local.cluster__workload_identity__google_service_account__key
   }
 }
 

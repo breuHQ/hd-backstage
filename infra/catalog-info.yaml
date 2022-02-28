@@ -60,7 +60,6 @@ spec:
   owner: backstage/breu-dev
   system: backstage/backstage
 ---
----
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:

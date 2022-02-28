@@ -58,7 +58,8 @@ variable "service_account_roles" {
     "roles/logging.logWriter",
     "roles/monitoring.metricWriter",
     "roles/stackdriver.resourceMetadata.writer",
-    "roles/storage.objectViewer",
+    # "roles/storage.objectViewer",
+    "roles/storage.admin",
     "roles/cloudtrace.agent",
   ]
 }

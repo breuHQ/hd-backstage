@@ -53,6 +53,10 @@ spec:
               memory: "256Mi"
           ports:
             -  containerPort: ${backstage__backend__container__port}
+          volumeMounts:
+            - name: secrets
+              mountPath: /etc/backstage/secrets
+              readOnly: true
           env:
             - name: BACKSTAGE_DB_HOST
               valueFrom:
@@ -94,3 +98,12 @@ spec:
                 secretKeyRef:
                   name: ${backstage__secret__application_credentials}
                   key: gitlab_discovery_url
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/backstage/secrets/service_account.json
+      volumes:
+        - name: secrets
+          secret:
+            secretName: ${backstage__secret__application_credentials}
+            items:
+            - key: service_account_json
+              path: service_account.json
