@@ -20,3 +20,5 @@ spec:
     - resource:backstage/backstage-backend-certificate
     - resource:backstage/loadbalancer
   system: backstage/backstage
+  providesApis:
+    - backstage/github-rest-api
