@@ -207,15 +207,18 @@ resource "kubernetes_secret" "backstage_database_credentials" {
   }
 
   data = {
-    db_host              = module.db.private_ip_address
-    db_port              = 5432
-    db_user              = local.database__user
-    db_pass              = local.database__password
-    app_url              = local.cluster__namepsace__backstage__component__backend__env__app_url
-    backend_url          = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
-    gitlab_token         = var.secret_gitlab_token
-    gitlab_discovery_url = var.secret_gitlab_discovery_url
-    service_account_json = local.cluster__workload_identity__google_service_account__key
+    db_host                = module.db.private_ip_address
+    db_port                = 5432
+    db_user                = local.database__user
+    db_pass                = local.database__password
+    app_url                = local.cluster__namepsace__backstage__component__backend__env__app_url
+    backend_url            = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
+    gitlab_token           = var.secret_gitlab_token
+    gitlab_discovery_url   = var.secret_gitlab_discovery_url
+    onelogin_client_id     = var.secret_onelogin_client_id
+    onelogin_client_secret = var.secret_onelogin_client_secret
+    oneloign_issuer        = var.secret_onelogin_issuer
+    service_account_json   = local.cluster__workload_identity__google_service_account__key
   }
 }
 

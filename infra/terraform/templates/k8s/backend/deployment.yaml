@@ -98,6 +98,21 @@ spec:
                 secretKeyRef:
                   name: ${backstage__secret__application_credentials}
                   key: gitlab_discovery_url
+            - name: ONELOGIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: onelogin_client_id
+            - name: ONELOGIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: onelogin_client_secret
+            - name: ONELOGIN_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__application_credentials}
+                  key: onelogin_issuer
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/backstage/secrets/service_account.json
       volumes:
