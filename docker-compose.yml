@@ -6,11 +6,11 @@ services:
       dockerfile: packages/backend/Dockerfile
     image: backstage/backend
     environment:
-      - BACKSTAGE_DB_HOST=db
-      - BACKSTAGE_DB_PORT=${BACKSTAGE_DB_PORT}
-      - BACKSTAGE_DB_USER=${BACKSTAGE_DB_USER}
-      - BACKSTAGE_DB_NAME=${BACKSTAGE_DB_NAME}
-      - BACKSTAGE_DB_PASS=${BACKSTAGE_DB_PASS}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PASS=${DB_PASS}
     networks:
       - backstage-network
     restart: always
@@ -19,9 +19,9 @@ services:
   db:
     image: postgres:14
     environment:
-      - POSTGRES_DB=${BACKSTAGE_DB_NAME}
-      - POSTGRES_USER=${BACKSTAGE_DB_USER}
-      - POSTGRES_PASSWORD=${BACKSTAGE_DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     ports:
       - 5432:5432
     volumes:  # this is the default
