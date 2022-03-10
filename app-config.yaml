@@ -1,12 +1,12 @@
 app:
   title: HD Digital Landscape
-  baseUrl: ${BACKSTAGE_APP_URL}
+  baseUrl: ${APP_BASE_URL}
 
 organization:
   name: HD Digital
 
 backend:
-  baseUrl: ${BACKSTAGE_BACKEND_URL}
+  baseUrl: ${BACKEND_BASE_URL}
   reading:
     allow:
       - host: raw.githubusercontent.com
@@ -17,17 +17,17 @@ backend:
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: ${BACKSTAGE_APP_URL}
+    origin: ${APP_BASE_URL}
     methods: [GET, POST, PUT, DELETE]
     credentials: true
   # config options: https://node-postgres.com/api/client
   database:
     client: pg
     connection:
-      host: ${BACKSTAGE_DB_HOST}
-      port: ${BACKSTAGE_DB_PORT}
-      user: ${BACKSTAGE_DB_USER}
-      password: ${BACKSTAGE_DB_PASS}
+      host: ${DB_HOST}
+      port: ${DB_PORT}
+      user: ${DB_USER}
+      password: ${DB_PASS}
       # ssl:
       #   ca: # if you have a CA file and want to verify it you can uncomment this section
       #     $file: <file-path>/ca/server.crt
@@ -55,10 +55,10 @@ techdocs:
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  environment: production
+  environment: development
   providers:
     onelogin:
-      production:
+      development:
         clientId: ${ONELOGIN_CLIENT_ID}
         clientSecret: ${ONELOGIN_CLIENT_SECRET}
         issuer: ${ONELOGIN_ISSUER}

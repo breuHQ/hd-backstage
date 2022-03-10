@@ -39,7 +39,7 @@ import { Root } from './components/Root';
 import { searchPage } from './components/search/SearchPage';
 
 const oneloginProver: SignInProviderConfig = {
-  id: 'onelogin',
+  id: 'onelogin-auth-provider',
   title: 'OneLogin',
   message: 'Signin Using OneLogin',
   apiRef: oneloginAuthApiRef,
