@@ -59,6 +59,11 @@ locals {
       range_name    = "${var.name}-cluster-subnetwork-range-services-${random_id.suffix.hex}"
       ip_cidr_range = "10.12.0.0/22"
     }
+
+    google_managed_services = {
+      range_name    = "${var.name}-subnetwork-google-managed-services-${random_id.suffix.hex}"
+      ip_cidr_range = "10.13.0.0/16"
+    }
   }
 
   # egress to allow traffic to the internet
