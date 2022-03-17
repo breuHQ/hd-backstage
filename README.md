@@ -27,7 +27,7 @@ Open a second term
 yarn dev
 ```
 
-When the command finishes running, it should open up a browser window displaying your app at http://localhost:3000
+When the command finishes running, it should open up a browser window displaying your app at <http://localhost:3000>
 
 ### Environment Variables
 
@@ -55,18 +55,18 @@ ONELOGIN_CLIENT_SECRET=<CONSULT MANAGER>
 ONELOGIN_ISSUER=<CONSULT MANAGER>
 ```
 
-| Variable               | Description                                                                               | Default Value                                       |
-| ---------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| DB_HOST                | Database Host Name                                                                        | localhost                                           |
-| DB_PORT                | Database port                                                                             | 5432                                                |
-| DB_USER                | Database username                                                                         | backstage                                           |
-| DB_PASS                | Database password                                                                         | backstage                                           |
-| DB_NAME                | Database name                                                                             | backstage                                           |
-| GITLAB_DISCOVERY_URL   | Gitlab Discovery URL. See [docs](https://backstage.io/docs/integrations/gitlab/discovery) | https://gitlab.com/devexp_/blob/*/catalog-info.yaml |
-| GITLAB_TOKEN           | Gitlab's personal access token                                                            |                                                     |
-| ONELOGIN_CLIENT_ID     | Onelogin Client ID                                                                        |                                                     |
-| ONELOGIN_CLIENT_SECRET | Onelogin Client Secret                                                                    |                                                     |
-| ONELOGIN_ISSUER        | Onelogin Issuer                                                                           |                                                     |
+| Variable               | Description                                                                               | Default Value                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| DB_HOST                | Database Host Name                                                                        | localhost                                             |
+| DB_PORT                | Database port                                                                             | 5432                                                  |
+| DB_USER                | Database username                                                                         | backstage                                             |
+| DB_PASS                | Database password                                                                         | backstage                                             |
+| DB_NAME                | Database name                                                                             | backstage                                             |
+| GITLAB_DISCOVERY_URL   | Gitlab Discovery URL. See [docs](https://backstage.io/docs/integrations/gitlab/discovery) | <https://gitlab.com/devexp_/blob/*/catalog-info.yaml> |
+| GITLAB_TOKEN           | Gitlab's personal access token                                                            |                                                       |
+| ONELOGIN_CLIENT_ID     | Onelogin Client ID                                                                        |                                                       |
+| ONELOGIN_CLIENT_SECRET | Onelogin Client Secret                                                                    |                                                       |
+| ONELOGIN_ISSUER        | Onelogin Issuer                                                                           |                                                       |
 
 ## Infrastructure
 
