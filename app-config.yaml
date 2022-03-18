@@ -60,10 +60,10 @@ techdocs:
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  environment: development
+  environment: poc
   providers:
     onelogin:
-      development:
+      poc:
         clientId: ${ONELOGIN_CLIENT_ID}
         clientSecret: ${ONELOGIN_CLIENT_SECRET}
         issuer: ${ONELOGIN_ISSUER}
