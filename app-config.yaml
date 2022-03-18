@@ -58,18 +58,18 @@ techdocs:
     googleGcs:
       bucketName: 'backstage-docs-55f14ee8'
 
-# auth:
-#   # see https://backstage.io/docs/auth/ to learn about auth providers
-#   environment: development
-#   providers:
-#     onelogin:
-#       development:
-#         clientId: ${ONELOGIN_CLIENT_ID}
-#         clientSecret: ${ONELOGIN_CLIENT_SECRET}
-#         issuer: ${ONELOGIN_ISSUER}
-
 auth:
-  providers: {}
+  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
+  providers:
+    onelogin:
+      development:
+        clientId: ${ONELOGIN_CLIENT_ID}
+        clientSecret: ${ONELOGIN_CLIENT_SECRET}
+        issuer: ${ONELOGIN_ISSUER}
+
+# auth:
+#   providers: {}
 
 
 scaffolder:
