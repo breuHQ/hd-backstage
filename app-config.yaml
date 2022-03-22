@@ -60,10 +60,10 @@ techdocs:
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  environment: poc
+  environment: development
   providers:
     onelogin:
-      poc:
+      development:
         clientId: ${ONELOGIN_CLIENT_ID}
         clientSecret: ${ONELOGIN_CLIENT_SECRET}
         issuer: ${ONELOGIN_ISSUER}
@@ -100,25 +100,3 @@ catalog:
       target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
       rules:
         - allow: [Template]
-
-# catalog:
-#   locations:
-#     # Backstage example components
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-components.yaml
-
-#     # Backstage example systems
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-systems.yaml
-
-#     # Backstage example APIs
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-apis.yaml
-
-#     # Backstage example resources
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-resources.yaml
-
-#     # Backstage example organization groups
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
