@@ -1,21 +1,7 @@
-# apiVersion: backstage.io/v1alpha1
-# kind: Component
-# metadata:
-#   name: backstage-core
-#   description: Developer Experience Platform
-#   # Example for optional annotations
-#   # annotations:
-#   #   github.com/project-slug: backstage/backstage
-#   #   backstage.io/techdocs-ref: dir:.
-# spec:
-#   type: service
-#   owner: dev@breu.io
-#   lifecycle: poc 
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
   name: backstage
-  namespace: backstage
 spec:
   targets:
     - ./packages/app/catalog-info.yaml
@@ -26,19 +12,30 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: backstage
-  namespace: backstage
 spec:
   owner: breu-dev
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: breu-dev
-  namespace: backstage
-  description: Breu.io Vendor Team
+  name: breu
+  description: Breu | Technology for humans
 spec:
   type: team
   profile:
     displayName: HD Team @ Breu
     email: hd@breu.io
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: github-rest-api
+  description: The official Spotify REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: breu-dev
+  system: backstage/backstage
+  definition:
+    $text: https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/ghes-3.4/ghes-3.4.yaml

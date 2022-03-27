@@ -1,12 +1,23 @@
 app:
   title: HD Digital Landscape
-  baseUrl: ${BACKSTAGE_APP_URL}
+  baseUrl: ${APP_BASE_URL}
+  support:
+    url: https://breu.io # Used by common ErrorPage
+    items: # Used by common SupportButton component
+      - title: Contact Support
+        icon: supportagent
+        links:
+          - url: https://breu.io
+            title: Chat
 
 organization:
   name: HD Digital
 
 backend:
-  baseUrl: ${BACKSTAGE_BACKEND_URL}
+  baseUrl: ${BACKEND_BASE_URL}
+  reading:
+    allow:
+      - host: raw.githubusercontent.com
   listen:
     port: 7007
   csp:
@@ -14,23 +25,25 @@ backend:
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: ${BACKSTAGE_APP_URL}
+    origin: ${APP_BASE_URL}
     methods: [GET, POST, PUT, DELETE]
     credentials: true
   # config options: https://node-postgres.com/api/client
   database:
     client: pg
     connection:
-      host: ${BACKSTAGE_DB_HOST}
-      port: ${BACKSTAGE_DB_PORT}
-      user: ${BACKSTAGE_DB_USER}
-      password: ${BACKSTAGE_DB_PASS}
+      host: ${DB_HOST}
+      port: ${DB_PORT}
+      user: ${DB_USER}
+      password: ${DB_PASS}
       # ssl:
       #   ca: # if you have a CA file and want to verify it you can uncomment this section
       #     $file: <file-path>/ca/server.crt
   cache:
     store: memory
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+proxy: {}
 
 integrations:
   gitlab:
@@ -42,24 +55,29 @@ integrations:
 # and an external cloud storage when deploying TechDocs for production use-case.
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  builder: 'local' # Alternatives - 'external'
+  builder: 'local' # TODO: ysf: this needs to change to support CI/CD
   generator:
-    runIn: 'local' # Alternatives - 'local'
+    runIn: 'local' # TODO: ysf: this needs to change to support CI/CD
   publisher:
     type: 'googleGcs'
     googleGcs:
       bucketName: 'backstage-docs-55f14ee8'
-  # publisher:
-  #   type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  environment: development
+  providers:
+    onelogin:
+      development:
+        clientId: ${ONELOGIN_CLIENT_ID}
+        clientSecret: ${ONELOGIN_CLIENT_SECRET}
+        issuer: ${ONELOGIN_ISSUER}
+
+# auth:
+#   providers: {}
+
 
 scaffolder:
-  # github:
-  #   token: ${GITLAB_TOKEN}
-  #   visibility: public # or 'internal' or 'private'
   gitlab:
     api:
       token: ${GITLAB_TOKEN}
@@ -87,25 +105,3 @@ catalog:
       target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
       rules:
         - allow: [Template]
-
-# catalog:
-#   locations:
-#     # Backstage example components
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-components.yaml
-
-#     # Backstage example systems
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-systems.yaml
-
-#     # Backstage example APIs
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-apis.yaml
-
-#     # Backstage example resources
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-resources.yaml
-
-#     # Backstage example organization groups
-#     - type: url
-#       target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml

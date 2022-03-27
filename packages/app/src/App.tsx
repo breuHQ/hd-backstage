@@ -1,60 +1,97 @@
-import React from 'react';
-import { Navigate, Route } from 'react-router';
+import { createApp } from '@backstage/app-defaults';
+import {
+  AppComponents,
+  AppRouteBinder,
+  FlatRoutes,
+} from '@backstage/core-app-api';
+import {
+  AlertDisplay,
+  OAuthRequestDialog,
+  SignInPage,
+  SignInProviderConfig,
+} from '@backstage/core-components';
+import { oneloginAuthApiRef } from '@backstage/core-plugin-api';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
   catalogPlugin,
 } from '@backstage/plugin-catalog';
+import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import {
   CatalogImportPage,
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
-import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
 import { orgPlugin } from '@backstage/plugin-org';
+import { PermissionedRoute } from '@backstage/plugin-permission-react';
+import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
 import { SearchPage } from '@backstage/plugin-search';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
 import {
-  DefaultTechDocsHome,
   TechDocsIndexPage,
   techdocsPlugin,
   TechDocsReaderPage,
 } from '@backstage/plugin-techdocs';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
+import React from 'react';
+import { Navigate, Route } from 'react-router';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
+import { Root } from './components/root';
 import { searchPage } from './components/search/SearchPage';
-import { Root } from './components/Root';
 
-import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
-import { FlatRoutes } from '@backstage/core-app-api';
-import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
-import { PermissionedRoute } from '@backstage/plugin-permission-react';
-import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common';
+/**
+ * Configures Onelogin authentication.
+ */
+const oneloginProver: SignInProviderConfig = {
+  id: 'onelogin-auth-provider',
+  title: 'OneLogin',
+  message: 'Signin Using OneLogin',
+  apiRef: oneloginAuthApiRef,
+};
 
+/**
+ * Update components to be included in the app.
+ */
+const components: Partial<AppComponents> = {
+  SignInPage: props => <SignInPage {...props} auto provider={oneloginProver} />,
+};
+
+/**
+ * Configures the routes for the app.
+ */
+const bindRoutes: (context: { bind: AppRouteBinder }) => void = ({ bind }) => {
+  bind(catalogPlugin.externalRoutes, {
+    createComponent: scaffolderPlugin.routes.root,
+    viewTechDoc: techdocsPlugin.routes.docRoot,
+  });
+  bind(apiDocsPlugin.externalRoutes, {
+    registerApi: catalogImportPlugin.routes.importPage,
+  });
+  bind(scaffolderPlugin.externalRoutes, {
+    registerComponent: catalogImportPlugin.routes.importPage,
+  });
+  bind(orgPlugin.externalRoutes, {
+    catalogIndex: catalogPlugin.routes.catalogIndex,
+  });
+};
+
+/**
+ * Create the app configuration signleton
+ */
 const app = createApp({
   apis,
-  bindRoutes({ bind }) {
-    bind(catalogPlugin.externalRoutes, {
-      createComponent: scaffolderPlugin.routes.root,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-    });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
-    });
-    bind(scaffolderPlugin.externalRoutes, {
-      registerComponent: catalogImportPlugin.routes.importPage,
-    });
-    bind(orgPlugin.externalRoutes, {
-      catalogIndex: catalogPlugin.routes.catalogIndex,
-    });
-  },
+  components,
+  bindRoutes,
 });
 
 const AppProvider = app.getProvider();
 const AppRouter = app.getRouter();
 
+/**
+ * Populate the app routing component
+ */
 const routes = (
   <FlatRoutes>
     <Navigate key="/" to="catalog" />
@@ -65,9 +102,7 @@ const routes = (
     >
       {entityPage}
     </Route>
-    <Route path="/docs" element={<TechDocsIndexPage />}>
-      <DefaultTechDocsHome />
-    </Route>
+    <Route path="/docs" element={<TechDocsIndexPage />} />
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}
@@ -91,6 +126,9 @@ const routes = (
   </FlatRoutes>
 );
 
+/**
+ * Render the app
+ */
 const App = () => (
   <AppProvider>
     <AlertDisplay />

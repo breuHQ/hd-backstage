@@ -80,3 +80,15 @@ variable "secret_gitlab_token" {
 variable "secret_gitlab_discovery_url" {
   type = string
 }
+
+variable "secret_onelogin_client_id" {
+  type = string
+}
+
+variable "secret_onelogin_client_secret" {
+  type = string
+}
+
+variable "secret_onelogin_issuer" {
+  type = string
+}

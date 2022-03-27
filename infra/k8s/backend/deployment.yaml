@@ -57,56 +57,71 @@ spec:
           ports:
             -  containerPort: 7007
           volumeMounts:
-            - name: secrets
-              mountPath: /etc/backstage/secrets
+            - name: files
+              mountPath: /etc/backstage/files
               readOnly: true
           env:
-            - name: BACKSTAGE_DB_HOST
+            - name: DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: db_host
-            - name: BACKSTAGE_DB_PORT
+            - name: DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: db_port
-            - name: BACKSTAGE_DB_USER
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: db_user
-            - name: BACKSTAGE_DB_PASS
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: db_pass
-            - name: BACKSTAGE_APP_URL
+            - name: APP_BASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
-                  key: app_url
-            - name: BACKSTAGE_BACKEND_URL
+                  name: backstage-environment-variables-55f14ee8
+                  key: app_base_url
+            - name: BACKEND_BASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
-                  key: backend_url
+                  name: backstage-environment-variables-55f14ee8
+                  key: backend_base_url
             - name: GITLAB_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: gitlab_token
             - name: GITLAB_DISCOVERY_URL
               valueFrom:
                 secretKeyRef:
-                  name: backstage-application-credentials-55f14ee8
+                  name: backstage-environment-variables-55f14ee8
                   key: gitlab_discovery_url
+            - name: ONELOGIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-environment-variables-55f14ee8
+                  key: onelogin_client_id
+            - name: ONELOGIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-environment-variables-55f14ee8
+                  key: onelogin_client_secret
+            - name: ONELOGIN_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-environment-variables-55f14ee8
+                  key: onelogin_issuer
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /etc/backstage/secrets/service_account.json
+              value: /etc/backstage/files/service_account.json
       volumes:
-        - name: secrets
+        - name: files
           secret:
-            secretName: backstage-application-credentials-55f14ee8
+            secretName: backstage-files-55f14ee8
             items:
             - key: service_account_json
               path: service_account.json
