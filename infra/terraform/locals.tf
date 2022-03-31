@@ -59,6 +59,11 @@ locals {
       range_name    = "${var.name}-cluster-subnetwork-range-services-${random_id.suffix.hex}"
       ip_cidr_range = "10.12.0.0/22"
     }
+
+    google_managed_services = {
+      range_name    = "${var.name}-subnetwork-google-managed-services-${random_id.suffix.hex}"
+      ip_cidr_range = "10.13.0.0/16"
+    }
   }
 
   # egress to allow traffic to the internet
@@ -103,7 +108,21 @@ locals {
   cluster__namespace__backstage__component__backend__name                = "backend"
   cluster__namespace__backstage__component__backend__service__name       = "backstage-backend-service"
   cluster__namespace__backstage__name                                    = var.name
-  cluster__namespace__backstage__secret__application_credentials__name   = "${var.name}-application-credentials-${random_id.suffix.hex}"
+  cluster__namespace__backstage__secret__environment_variables__name     = "${var.name}-environment-variables-${random_id.suffix.hex}"
+  cluster__namespace__backstage__secret__environment_variables__data = {
+    db_host                = module.db.private_ip_address
+    db_port                = 5432
+    db_user                = local.database__user
+    db_pass                = local.database__password
+    app_base_url           = local.cluster__namepsace__backstage__component__backend__env__app_url
+    backend_base_url       = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
+    gitlab_token           = var.secret_gitlab_token
+    gitlab_discovery_url   = var.secret_gitlab_discovery_url
+    onelogin_client_id     = var.secret_onelogin_client_id
+    onelogin_client_secret = var.secret_onelogin_client_secret
+    onelogin_issuer        = var.secret_onelogin_issuer
+  }
+  cluster__namespace__backstage__secret__files__name = "${var.name}-files-${random_id.suffix.hex}"
 
   cluster__workload_identity__google_service_account__name     = "${var.name}-cluster-${random_id.suffix.hex}"
   cluster__workload_identity__google_service_account__email    = google_service_account.backstage_cluster_workload_identity.email

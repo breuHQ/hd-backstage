@@ -5,7 +5,7 @@ metadata:
   namespace: backstage
   title: Backstage Website
   description: Backstage Website
-  annotations:
+  annotations: {}
   tags: 
     - typescript
     - website
