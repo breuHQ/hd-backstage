@@ -12,6 +12,6 @@ spec:
   type: website
   dependsOn:
     - component:backend
-  owner: breu-dev
+  owner: breu
   lifecycle: poc
   system: backstage
