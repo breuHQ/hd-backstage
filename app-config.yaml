@@ -1,6 +1,14 @@
 app:
   title: HD Digital Landscape
   baseUrl: ${APP_BASE_URL}
+  support:
+    url: https://breu.io # Used by common ErrorPage
+    items: # Used by common SupportButton component
+      - title: Contact Support
+        icon: supportagent
+        links:
+          - url: https://breu.io
+            title: Chat
 
 organization:
   name: HD Digital
@@ -35,10 +43,7 @@ backend:
     store: memory
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
-proxy:
-  '/test':
-    target: 'https://example.com'
-    changeOrigin: true
+proxy: {}
 
 integrations:
   gitlab:
