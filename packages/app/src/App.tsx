@@ -1,5 +1,9 @@
 import { createApp } from '@backstage/app-defaults';
-import { FlatRoutes } from '@backstage/core-app-api';
+import {
+  AppComponents,
+  AppRouteBinder,
+  FlatRoutes,
+} from '@backstage/core-app-api';
 import {
   AlertDisplay,
   OAuthRequestDialog,
@@ -34,9 +38,12 @@ import React from 'react';
 import { Navigate, Route } from 'react-router';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
-import { Root } from './components/Root';
+import { Root } from './components/root';
 import { searchPage } from './components/search/SearchPage';
 
+/**
+ * Configures Onelogin authentication.
+ */
 const oneloginProver: SignInProviderConfig = {
   id: 'onelogin-auth-provider',
   title: 'OneLogin',
@@ -44,33 +51,47 @@ const oneloginProver: SignInProviderConfig = {
   apiRef: oneloginAuthApiRef,
 };
 
+/**
+ * Update components to be included in the app.
+ */
+const components: Partial<AppComponents> = {
+  SignInPage: props => <SignInPage {...props} auto provider={oneloginProver} />,
+};
+
+/**
+ * Configures the routes for the app.
+ */
+const bindRoutes: (context: { bind: AppRouteBinder }) => void = ({ bind }) => {
+  bind(catalogPlugin.externalRoutes, {
+    createComponent: scaffolderPlugin.routes.root,
+    viewTechDoc: techdocsPlugin.routes.docRoot,
+  });
+  bind(apiDocsPlugin.externalRoutes, {
+    registerApi: catalogImportPlugin.routes.importPage,
+  });
+  bind(scaffolderPlugin.externalRoutes, {
+    registerComponent: catalogImportPlugin.routes.importPage,
+  });
+  bind(orgPlugin.externalRoutes, {
+    catalogIndex: catalogPlugin.routes.catalogIndex,
+  });
+};
+
+/**
+ * Create the app configuration signleton
+ */
 const app = createApp({
   apis,
-  components: {
-    SignInPage: props => (
-      <SignInPage {...props} auto provider={oneloginProver} />
-    ),
-  },
-  bindRoutes({ bind }) {
-    bind(catalogPlugin.externalRoutes, {
-      createComponent: scaffolderPlugin.routes.root,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-    });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
-    });
-    bind(scaffolderPlugin.externalRoutes, {
-      registerComponent: catalogImportPlugin.routes.importPage,
-    });
-    bind(orgPlugin.externalRoutes, {
-      catalogIndex: catalogPlugin.routes.catalogIndex,
-    });
-  },
+  components,
+  bindRoutes,
 });
 
 const AppProvider = app.getProvider();
 const AppRouter = app.getRouter();
 
+/**
+ * Populate the app routing component
+ */
 const routes = (
   <FlatRoutes>
     <Navigate key="/" to="catalog" />
@@ -105,6 +126,9 @@ const routes = (
   </FlatRoutes>
 );
 
+/**
+ * Render the app
+ */
 const App = () => (
   <AppProvider>
     <AlertDisplay />
