@@ -4,7 +4,7 @@
 
 module "db" {
   source              = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  version             = "9.0.0"
+  version             = "10.0.0"
   project_id          = var.project
   region              = var.region
   name                = local.database__instance_name
@@ -25,6 +25,7 @@ module "db" {
     authorized_networks = []
     require_ssl         = false
     private_network     = google_compute_network.backstage.self_link
+    allocated_ip_range  = null
     ipv4_enabled        = false
   }
 

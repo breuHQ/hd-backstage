@@ -190,17 +190,17 @@ resource "google_service_account_iam_member" "backstage_workload_identity" {
 }
 
 # ------------------------------------------------------------------------------
-# DATABASE SECRETS TO BE USED ACCROSS APPLICATIONS
+# CREDENTIALS REQUIRED TO RUN BACKSTAGE
 # ------------------------------------------------------------------------------
 
-resource "kubernetes_secret" "backstage_database_credentials" {
+resource "kubernetes_secret" "backstage_environment_variables" {
   depends_on = [
     module.db,
     kubernetes_namespace.backstage,
   ]
 
   metadata {
-    name      = local.cluster__namespace__backstage__secret__application_credentials__name
+    name      = local.cluster__namespace__backstage__secret__environment_variables__name
     namespace = local.cluster__namespace__backstage__name
 
     labels = var.resource_labels
@@ -211,14 +211,32 @@ resource "kubernetes_secret" "backstage_database_credentials" {
     db_port                = 5432
     db_user                = local.database__user
     db_pass                = local.database__password
-    app_url                = local.cluster__namepsace__backstage__component__backend__env__app_url
-    backend_url            = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
+    app_base_url           = local.cluster__namepsace__backstage__component__backend__env__app_url
+    backend_base_url       = "https://${local.cluster__namespace__backstage__component__backend__certificate__domain}"
     gitlab_token           = var.secret_gitlab_token
     gitlab_discovery_url   = var.secret_gitlab_discovery_url
     onelogin_client_id     = var.secret_onelogin_client_id
     onelogin_client_secret = var.secret_onelogin_client_secret
     onelogin_issuer        = var.secret_onelogin_issuer
-    service_account_json   = local.cluster__workload_identity__google_service_account__key
+    # service_account_json   = local.cluster__workload_identity__google_service_account__key
+  }
+}
+
+resource "kubernetes_secret" "backstage_files" {
+  depends_on = [
+    module.backstage_gke,
+    kubernetes_namespace.backstage,
+  ]
+
+  metadata {
+    name      = local.cluster__namespace__backstage__secret__files__name
+    namespace = local.cluster__namespace__backstage__name
+
+    labels = var.resource_labels
+  }
+
+  data = {
+    service_account_json = local.cluster__workload_identity__google_service_account__key
   }
 }
 
@@ -230,22 +248,23 @@ resource "local_file" "k8s_backend_templates" {
   for_each = fileset("${path.module}/templates", "k8s/backend/*.yaml")
 
   content = templatefile("${path.module}/templates/${each.key}", {
-    backstage__backend__certificate__domain    = local.cluster__namespace__backstage__component__backend__certificate__domain
-    backstage__backend__certificate__name      = local.cluster__namepsace__backstage__component__backend__certificate__name
-    backstage__backend__container__image       = "${local.cluster__artifact__registry__link}/${local.cluster__namespace__backstage__component__backend__image__name}:${local.cluster__namespace__backstage__component__backend__image__tag}"
-    backstage__backend__container__name        = local.cluster__namespace__backstage__component__backend__container__name
-    backstage__backend__container__port        = 7007
-    backstage__backend__deployment__name       = local.cluster__namespace__backstage__component__backend__deployment__name
-    backstage__backend__frontend_config__name  = local.cluster__namespace__backstage__component__backend__frontend__name
-    backstage__backend__hpa__name              = local.cluster__namespace__backstage__component__backend__hpa__name
-    backstage__backend__ingress__address       = local.cluster__namespace__backstage__component__backend__lb_address__name
-    backstage__backend__ingress__name          = local.cluster__namespace__backstage__component__backend__ingress__name
-    backstage__backend__labels                 = local.cluster__namespace__backstage__component__backend__labels
-    backstage__backend__service__name          = local.cluster__namespace__backstage__component__backend__service__name
-    backstage__backend__service__port          = 7007
-    backstage__namespace__name                 = local.cluster__namespace__backstage__name
-    backstage__secret__application_credentials = local.cluster__namespace__backstage__secret__application_credentials__name
-    backstage__service_account__name           = local.cluster__workload_identity__kubernetes_service_account__name
+    backstage__backend__certificate__domain   = local.cluster__namespace__backstage__component__backend__certificate__domain
+    backstage__backend__certificate__name     = local.cluster__namepsace__backstage__component__backend__certificate__name
+    backstage__backend__container__image      = "${local.cluster__artifact__registry__link}/${local.cluster__namespace__backstage__component__backend__image__name}:${local.cluster__namespace__backstage__component__backend__image__tag}"
+    backstage__backend__container__name       = local.cluster__namespace__backstage__component__backend__container__name
+    backstage__backend__container__port       = 7007
+    backstage__backend__deployment__name      = local.cluster__namespace__backstage__component__backend__deployment__name
+    backstage__backend__frontend_config__name = local.cluster__namespace__backstage__component__backend__frontend__name
+    backstage__backend__hpa__name             = local.cluster__namespace__backstage__component__backend__hpa__name
+    backstage__backend__ingress__address      = local.cluster__namespace__backstage__component__backend__lb_address__name
+    backstage__backend__ingress__name         = local.cluster__namespace__backstage__component__backend__ingress__name
+    backstage__backend__labels                = local.cluster__namespace__backstage__component__backend__labels
+    backstage__backend__service__name         = local.cluster__namespace__backstage__component__backend__service__name
+    backstage__backend__service__port         = 7007
+    backstage__namespace__name                = local.cluster__namespace__backstage__name
+    backstage__secret__environment_variables  = local.cluster__namespace__backstage__secret__environment_variables__name
+    backstage__secret__files                  = local.cluster__namespace__backstage__secret__files__name
+    backstage__service_account__name          = local.cluster__workload_identity__kubernetes_service_account__name
   })
 
   filename        = "../${each.key}"
