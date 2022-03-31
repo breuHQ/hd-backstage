@@ -11,7 +11,7 @@ metadata:
     - service
 spec:
   type: service
-  owner: breu-dev
+  owner: breu
   lifecycle: poc
   dependsOn:
     - resource:backstage-poc-35e94176
