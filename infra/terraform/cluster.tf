@@ -57,8 +57,8 @@ module "backstage_gke" {
       machine_type       = "n2-standard-2"
       min_count          = 1
       max_count          = 32
-      local_ssd_count    = 0
-      disk_size_gb       = 10
+      local_ssd_count    = 1
+      disk_size_gb       = 100
       disk_type          = "pd-ssd"
       image_type         = "COS"
       auto_repair        = true
