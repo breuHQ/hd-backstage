@@ -113,6 +113,12 @@ spec:
                 secretKeyRef:
                   name: ${backstage__secret__environment_variables}
                   key: onelogin_issuer
+            - name: GCS_ASSETS_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: ${backstage__secret__environment_variables}
+                  key: gcs_assets_bucket
+
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/backstage/files/service_account.json
       volumes:

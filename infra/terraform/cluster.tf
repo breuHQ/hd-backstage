@@ -218,7 +218,7 @@ resource "kubernetes_secret" "backstage_environment_variables" {
     onelogin_client_id     = var.secret_onelogin_client_id
     onelogin_client_secret = var.secret_onelogin_client_secret
     onelogin_issuer        = var.secret_onelogin_issuer
-    # service_account_json   = local.cluster__workload_identity__google_service_account__key
+    gcs_assets_bucket      = local.storage__assets__name
   }
 }
 
