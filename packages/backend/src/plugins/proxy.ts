@@ -1,13 +1,8 @@
 import { createRouter } from '@backstage/plugin-proxy-backend';
-import { Router } from 'express';
-import { PluginEnvironment } from '../types';
+import { CreatePluginRouterFn } from '../types';
 
-export default async function createPlugin(
-  env: PluginEnvironment,
-): Promise<Router> {
-  return await createRouter({
-    logger: env.logger,
-    config: env.config,
-    discovery: env.discovery,
-  });
-}
+export const proxy: CreatePluginRouterFn = async ({
+  logger,
+  config,
+  discovery,
+}) => await createRouter({ logger, config, discovery });

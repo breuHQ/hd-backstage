@@ -15,11 +15,13 @@
  */
 
 import { createStatusCheckRouter } from '@backstage/backend-common';
-import { Router } from 'express';
-import { PluginEnvironment } from '../types';
+import { CreatePluginRouterFn } from '../types';
 
-export default async function createRouter({
-  logger,
-}: PluginEnvironment): Promise<Router> {
-  return await createStatusCheckRouter({ logger, path: '/healthcheck' });
-}
+// export default async function createRouter({
+//   logger,
+// }: PluginEnvironment): Promise<Router> {
+//   return await createStatusCheckRouter({ logger, path: '/healthcheck' });
+// }
+
+export const healthcheck: CreatePluginRouterFn = async ({ logger }) =>
+  await createStatusCheckRouter({ logger, path: '/healthcheck' });

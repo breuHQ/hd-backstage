@@ -8,7 +8,8 @@ import {
   UrlReader,
 } from '@backstage/backend-common';
 import { PluginTaskScheduler } from '@backstage/backend-tasks';
-import { PermissionAuthorizer } from '@backstage/plugin-permission-common';
+import { PermissionEvaluator } from '@backstage/plugin-permission-common';
+import { Router } from 'express';
 
 export type PluginEnvironment = {
   logger: Logger;
@@ -19,5 +20,7 @@ export type PluginEnvironment = {
   discovery: PluginEndpointDiscovery;
   tokenManager: TokenManager;
   scheduler: PluginTaskScheduler;
-  permissions: PermissionAuthorizer;
+  permissions: PermissionEvaluator;
 };
+
+export type CreatePluginRouterFn = (env: PluginEnvironment) => Promise<Router>;

@@ -1,35 +1,28 @@
-/*
- * Hi!
- *
- * Note that this is an EXAMPLE Backstage backend. Please check the README.
- *
- * Happy hacking!
- */
-
-import Router from 'express-promise-router';
 import {
-  createServiceBuilder,
-  loadBackendConfig,
-  getRootLogger,
-  useHotMemoize,
-  notFoundHandler,
   CacheManager,
+  createServiceBuilder,
   DatabaseManager,
+  getRootLogger,
+  loadBackendConfig,
+  notFoundHandler,
+  ServerTokenManager,
   SingleHostDiscovery,
   UrlReaders,
-  ServerTokenManager,
+  useHotMemoize,
 } from '@backstage/backend-common';
 import { TaskScheduler } from '@backstage/backend-tasks';
 import { Config } from '@backstage/config';
-import auth from './plugins/auth';
-import catalog from './plugins/catalog';
-import scaffolder from './plugins/scaffolder';
-import proxy from './plugins/proxy';
-import techdocs from './plugins/techdocs';
-import search from './plugins/search';
-import healthcheck from './plugins/healthcheck';
-import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
+import Router from 'express-promise-router';
+import { assets } from './plugins/assets';
+import { auth } from './plugins/auth';
+import { catalog } from './plugins/catalog';
+import { healthcheck } from './plugins/healthcheck';
+import { proxy } from './plugins/proxy';
+import { scaffolder } from './plugins/scaffolder';
+import { search } from './plugins/search';
+import { techdocs } from './plugins/techdocs';
+import { PluginEnvironment } from './types';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -81,12 +74,13 @@ async function main() {
   const healthcheckEnv = useHotMemoize(module, () => createEnv('healthcheck'));
 
   const apiRouter = Router();
-  apiRouter.use('/catalog', await catalog(catalogEnv));
-  apiRouter.use('/scaffolder', await scaffolder(scaffolderEnv));
+  apiRouter.use('/assets', assets);
   apiRouter.use('/auth', await auth(authEnv));
-  apiRouter.use('/techdocs', await techdocs(techdocsEnv));
+  apiRouter.use('/catalog', await catalog(catalogEnv));
   apiRouter.use('/proxy', await proxy(proxyEnv));
+  apiRouter.use('/scaffolder', await scaffolder(scaffolderEnv));
   apiRouter.use('/search', await search(searchEnv));
+  apiRouter.use('/techdocs', await techdocs(techdocsEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());

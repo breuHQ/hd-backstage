@@ -73,8 +73,9 @@ auth:
         clientSecret: ${ONELOGIN_CLIENT_SECRET}
         issuer: ${ONELOGIN_ISSUER}
 
-# auth:
-#   providers: {}
+assets:
+  type: gcs
+  bucket: ${GCS_ASSETS_BUCKET}
 
 
 scaffolder:

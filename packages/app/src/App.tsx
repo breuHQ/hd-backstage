@@ -38,7 +38,7 @@ import React from 'react';
 import { Navigate, Route } from 'react-router';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
-import { Root } from './components/root';
+import { Root } from './components/Root';
 import { searchPage } from './components/search/SearchPage';
 
 /**
