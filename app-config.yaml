@@ -18,6 +18,7 @@ backend:
   reading:
     allow:
       - host: raw.githubusercontent.com
+      - host: '*.hd.digital'
   listen:
     port: 7007
   csp:
