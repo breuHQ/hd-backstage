@@ -13,7 +13,7 @@ kind: System
 metadata:
   name: backstage
 spec:
-  owner: breu-dev
+  owner: breu
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group

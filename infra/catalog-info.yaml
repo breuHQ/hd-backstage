@@ -2,6 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: backstage-network-55f14ee8
+  title: Backstage Network
   description: Backstage Database
 spec:
   type: network
@@ -12,6 +13,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: backstage-network-peering-address-55f14ee8
+  title: Backstage Network Peering Address
   description: Backstage Database
 spec:
   type: ip
@@ -24,6 +26,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: backstage-poc-35e94176
+  title: Backstage Database
   description: Backstage Database
 spec:
   type: database
